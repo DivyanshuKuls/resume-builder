@@ -30,7 +30,7 @@ export function ResumePreview({ resume }: ResumePreviewProps) {
       <PreviewContact contact={resume.contact} />
 
       {/* ── Dynamic section body ───────────────────────────────────── */}
-      <div className="mt-5 space-y-5">
+      <div className="rt-section-gap mt-5 flex flex-col">
         {bodySections.map((section) => (
           <SectionRenderer key={section.id} resume={resume} section={section} />
         ))}

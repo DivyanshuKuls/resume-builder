@@ -130,11 +130,22 @@ export interface CustomSection {
   content: string
 }
 
+export type BuiltInThemeId = 'classic' | 'modern' | 'minimal' | 'professional'
+
 export interface ThemeSettings {
-  primaryColor: string
-  fontFamily: string
-  fontSize: 'sm' | 'md' | 'lg'
-  accentColor: string
+  preset: BuiltInThemeId
+  /** Overrides the preset's primary/link color */
+  primaryColor?: string
+  /** Overrides the preset's heading color */
+  headingColor?: string
+  /** Overrides the preset's link color */
+  accentColor?: string
+  /** Font family key: 'inter' | 'roboto' | 'georgia' | 'merriweather' | 'source-sans' */
+  fontFamily?: string
+  /** Multiplier on baseFontSize (0.85–1.20). Default 1.0 */
+  fontScale?: number
+  /** Multiplier on all spacing values (0.75–1.25). Default 1.0 */
+  spacingDensity?: number
 }
 
 // ─── Root Resume ──────────────────────────────────────────────────────────────

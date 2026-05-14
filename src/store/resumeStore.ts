@@ -413,8 +413,23 @@ export const useResumeStore = create<ResumeStore>()(
     }),
     {
       name: 'resume-builder-data',
-      version: 2,
+      version: 3,
       storage: createJSONStorage(() => localStorage),
+      migrate(persistedState, version) {
+        const state = persistedState as { resume?: { theme?: Record<string, unknown> } }
+        if (version < 3 && state.resume?.theme) {
+          const old = state.resume.theme as Record<string, unknown>
+          state.resume.theme = {
+            preset: 'classic',
+            fontScale: old['fontSize'] === 'sm' ? 0.9 : old['fontSize'] === 'lg' ? 1.1 : 1.0,
+            spacingDensity: 1.0,
+            ...(old['primaryColor'] ? { primaryColor: old['primaryColor'] } : {}),
+            ...(old['accentColor']  ? { accentColor:  old['accentColor']  } : {}),
+            ...(old['fontFamily'] && old['fontFamily'] !== 'inter' ? { fontFamily: old['fontFamily'] } : {}),
+          }
+        }
+        return persistedState
+      },
     },
   ),
 )

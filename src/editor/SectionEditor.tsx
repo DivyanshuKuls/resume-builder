@@ -10,6 +10,7 @@ import { CertificationsEditor } from '@/editor/sections/CertificationsEditor'
 import { AchievementsEditor } from '@/editor/sections/AchievementsEditor'
 import { CustomSectionEditor } from '@/editor/sections/CustomSectionEditor'
 import { SectionManager } from '@/editor/SectionManager'
+import { ThemeEditor } from '@/editor/sections/ThemeEditor'
 import { PlaceholderEditor } from '@/editor/sections/PlaceholderEditor'
 
 export function SectionEditor() {
@@ -20,7 +21,7 @@ export function SectionEditor() {
     case 'personalInfo': return <PersonalInfoEditor />
     case 'contact':      return <ContactEditor />
     case 'sections':     return <SectionManager />
-    case 'theme':        return <PlaceholderEditor section="Theme" description="Customise colors, fonts, and layout. Coming soon." />
+    case 'theme':        return <ThemeEditor />
   }
 
   // Dynamic section routing — look up the section in the store

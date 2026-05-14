@@ -1,43 +1,35 @@
 import { formatDate } from '@/utils/formatDate'
 import type { RendererProps } from './types'
 
-/** Renders the certifications list. */
 export function CertificationRenderer({ resume }: RendererProps) {
   if (resume.certifications.length === 0) return null
 
   return (
-    <div className="space-y-2.5">
+    <div className="rt-entry-gap flex flex-col">
       {resume.certifications.map((cert) => (
         <div key={cert.id} className="resume-entry">
           <div className="flex items-baseline justify-between gap-4">
-            <h3 className="font-semibold text-slate-900 leading-snug" style={{ fontSize: 12 }}>
+            <h3 className="rt-entry-title leading-snug">
               {cert.url ? (
-                <a
-                  href={cert.url.startsWith('http') ? cert.url : `https://${cert.url}`}
-                  className="hover:text-blue-600 transition-colors"
-                >
+                <a href={cert.url.startsWith('http') ? cert.url : `https://${cert.url}`}>
                   {cert.name}
                 </a>
               ) : (
                 cert.name
               )}
             </h3>
-            <span className="shrink-0 tabular-nums text-slate-500" style={{ fontSize: 10 }}>
+            <span className="rt-meta shrink-0 tabular-nums">
               {formatDate(cert.date)}
               {cert.expiryDate && ` – ${formatDate(cert.expiryDate)}`}
             </span>
           </div>
 
           {cert.issuer && (
-            <p className="mt-0.5 font-medium text-blue-700" style={{ fontSize: 11 }}>
-              {cert.issuer}
-            </p>
+            <p className="rt-primary mt-0.5">{cert.issuer}</p>
           )}
 
           {cert.description && (
-            <p className="mt-1 leading-relaxed text-slate-600" style={{ fontSize: 11 }}>
-              {cert.description}
-            </p>
+            <p className="rt-body mt-1 leading-relaxed">{cert.description}</p>
           )}
         </div>
       ))}

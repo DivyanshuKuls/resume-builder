@@ -10,7 +10,7 @@ function Initials({ name }: { name: string }) {
     parts.length >= 2 ? `${parts[0][0]}${parts[parts.length - 1][0]}` : (parts[0]?.[0] ?? '?')
   return (
     <div
-      className="flex shrink-0 items-center justify-center rounded-full bg-blue-50 font-semibold text-blue-600"
+      className="rt-initials-bg flex shrink-0 items-center justify-center rounded-full font-semibold"
       style={{ width: 68, height: 68, fontSize: 22 }}
     >
       {chars.toUpperCase()}
@@ -26,8 +26,8 @@ function Avatar({ personalInfo }: { personalInfo: PersonalInfo }) {
       <img
         src={photo}
         alt={fullName}
-        className="shrink-0 rounded-full object-cover"
-        style={{ width: 68, height: 68, border: '1.5px solid #e2e8f0' }}
+        className="rt-avatar-border shrink-0 rounded-full object-cover"
+        style={{ width: 68, height: 68, borderWidth: '1.5px', borderStyle: 'solid' }}
       />
     )
   }
@@ -42,22 +42,14 @@ export function PreviewHeader({ personalInfo }: PreviewHeaderProps) {
   const nameBlock = (
     <div className="min-w-0 flex-1">
       {fullName && (
-        <h1
-          className="font-bold leading-none text-slate-900"
-          style={{ fontSize: 28, letterSpacing: '-0.5px' }}
-        >
-          {fullName}
-        </h1>
+        <h1 className="rt-name leading-none">{fullName}</h1>
       )}
       {jobTitle && (
-        <p className="mt-1.5 font-normal text-slate-500" style={{ fontSize: 13 }}>
-          {jobTitle}
-        </p>
+        <p className="rt-job-title mt-1.5">{jobTitle}</p>
       )}
     </div>
   )
 
-  // photo-right: name first, then avatar
   if (photoAlignment === 'right') {
     return (
       <div className="flex items-center gap-5 pb-4">
@@ -67,7 +59,6 @@ export function PreviewHeader({ personalInfo }: PreviewHeaderProps) {
     )
   }
 
-  // photo-left (default) or no photo
   return (
     <div className="flex items-center gap-5 pb-4">
       <Avatar personalInfo={personalInfo} />

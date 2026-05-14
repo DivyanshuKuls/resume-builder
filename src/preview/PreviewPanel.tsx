@@ -1,6 +1,7 @@
 import { forwardRef } from 'react'
 import { ResumePreview } from '@/preview/ResumePreview'
 import { useResumeStore } from '@/store/resumeStore'
+import { computeThemeCSSVars } from '@/themes'
 
 export const PreviewPanel = forwardRef<HTMLDivElement, Record<never, never>>((_props, ref) => {
   const resume = useResumeStore((s) => s.resume)
@@ -24,7 +25,7 @@ export const PreviewPanel = forwardRef<HTMLDivElement, Record<never, never>>((_p
       <div className="flex-1 overflow-auto bg-slate-100/80">
         <div className="flex min-h-full justify-center px-6 py-8">
           {/* The ref target — this exact div is captured by react-to-print */}
-          <div ref={ref} className="resume-paper">
+          <div ref={ref} className="resume-paper" style={computeThemeCSSVars(resume.theme)}>
             <ResumePreview resume={resume} />
           </div>
         </div>

@@ -36,7 +36,7 @@
 /*
  * A4 at 96 DPI = 794 × 1123 px.
  * Padding 56px × 64px ≈ 14.8mm × 16.9mm — safely inside printable bounds.
- * Font and line-height set here cascade to all resume content.
+ * Font and color cascade from CSS vars set by the theme engine.
  */
 .resume-paper {
   width: 794px;
@@ -49,10 +49,11 @@
     0 4px 20px -4px rgba(0, 0, 0, 0.12),
     0 16px 48px -8px rgba(0, 0, 0, 0.06);
   flex-shrink: 0;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  font-size: 11px;
-  line-height: 1.55;
-  color: #1e293b;
+  /* Typography driven by CSS vars — fallbacks match the 'classic' preset */
+  font-family: var(--rt-font-family, 'Inter', system-ui, sans-serif);
+  font-size: var(--rt-font-size-base, 11px);
+  line-height: var(--rt-line-height, 1.55);
+  color: var(--rt-color-body, #374151);
   -webkit-font-smoothing: antialiased;
 
   /* Prevent content from overflowing the paper */
@@ -60,6 +61,118 @@
   /* Wrap long words / URLs instead of overflowing */
   overflow-wrap: break-word;
   word-break: break-word;
+}
+
+/* ─── Resume theme semantic classes ─────────────────────────────────────── */
+/*
+ * Renderers use these instead of hardcoded Tailwind colour/size utilities.
+ * Each class maps a semantic role to a CSS var, keeping renderers decoupled
+ * from theme logic. Layout classes (flex, gap, mt-*) stay in Tailwind.
+ */
+
+.rt-name {
+  color: var(--rt-color-heading, #111827);
+  font-size: var(--rt-font-size-name, 28px);
+  font-weight: var(--rt-font-weight-name, 700);
+  letter-spacing: var(--rt-letter-spacing-name, -0.5px);
+  line-height: 1;
+}
+
+.rt-job-title {
+  color: var(--rt-color-muted, #6b7280);
+  font-size: var(--rt-font-size-job-title, 13px);
+  font-weight: 400;
+}
+
+.rt-section-heading {
+  color: var(--rt-color-muted, #6b7280);
+  font-size: var(--rt-font-size-section, 9px);
+  font-weight: var(--rt-font-weight-section, 700);
+  letter-spacing: var(--rt-letter-spacing-section, 0.12em);
+  text-transform: var(--rt-section-transform, uppercase);
+}
+
+.rt-section-rule {
+  background-color: var(--rt-rule-color, #d1d5db);
+  height: var(--rt-rule-width, 1px);
+}
+
+.rt-entry-title {
+  color: var(--rt-color-heading, #111827);
+  font-size: var(--rt-font-size-entry, 12px);
+  font-weight: var(--rt-font-weight-entry, 600);
+}
+
+.rt-primary {
+  color: var(--rt-color-primary, #1e3a5f);
+  font-size: var(--rt-font-size-secondary, 11px);
+  font-weight: var(--rt-font-weight-secondary, 500);
+}
+
+.rt-body {
+  color: var(--rt-color-body, #374151);
+  font-size: var(--rt-font-size-secondary, 11px);
+}
+
+.rt-meta {
+  color: var(--rt-color-muted, #6b7280);
+  font-size: var(--rt-font-size-meta, 10px);
+}
+
+.rt-link {
+  color: var(--rt-color-link, #1e3a5f);
+  font-size: var(--rt-font-size-meta, 10px);
+}
+
+.rt-contact {
+  color: var(--rt-color-body, #374151);
+  font-size: var(--rt-font-size-contact, 10.5px);
+}
+
+.rt-skill-pill {
+  background-color: var(--rt-color-surface, #f3f4f6);
+  color: var(--rt-color-heading, #111827);
+  border-radius: var(--rt-border-radius, 3px);
+  font-size: var(--rt-font-size-meta, 10px);
+  font-weight: 500;
+}
+
+.rt-bullet {
+  background-color: var(--rt-color-muted, #6b7280);
+}
+
+.rt-icon-muted {
+  color: var(--rt-color-muted, #6b7280);
+}
+
+.rt-border-contact {
+  border-color: var(--rt-color-border, #d1d5db);
+}
+
+.rt-initials-bg {
+  background-color: var(--rt-color-surface, #f3f4f6);
+  color: var(--rt-color-primary, #1e3a5f);
+}
+
+.rt-social-link {
+  color: var(--rt-color-link, #1e3a5f);
+}
+
+.rt-social-badge {
+  background-color: var(--rt-color-surface, #f3f4f6);
+  color: var(--rt-color-body, #374151);
+}
+
+.rt-section-gap > * + * {
+  margin-top: var(--rt-spacing-section-gap, 20px);
+}
+
+.rt-entry-gap > * + * {
+  margin-top: var(--rt-spacing-entry-gap, 14px);
+}
+
+.rt-item-gap > * + * {
+  margin-top: var(--rt-spacing-item-gap, 4px);
 }
 
 /* Long URLs inside anchors can overflow on narrow sections */

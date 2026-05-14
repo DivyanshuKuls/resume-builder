@@ -130,10 +130,9 @@ export const sampleResume: Resume = {
   achievements: [],
   customSections: [],
   theme: {
-    primaryColor: '#2563eb',
-    fontFamily: 'inter',
-    fontSize: 'md',
-    accentColor: '#7c3aed',
+    preset: 'classic' as const,
+    fontScale: 1.0,
+    spacingDensity: 1.0,
   },
   sections: [
     { id: 'summary',        type: 'summary',        title: 'Summary',          visible: true,  order: 0, alignment: 'left' },

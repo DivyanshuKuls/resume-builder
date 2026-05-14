@@ -16,8 +16,7 @@ const PLATFORM_SHORT: Record<string, string> = {
 function contactHref(type: string, value: string): string {
   if (type === 'email') return `mailto:${value}`
   if (type === 'phone') return `tel:${value.replace(/\s+/g, '')}`
-  const url = value.startsWith('http') ? value : `https://${value}`
-  return url
+  return value.startsWith('http') ? value : `https://${value}`
 }
 
 function SocialBadge({ platform }: { platform: string }) {
@@ -26,7 +25,7 @@ function SocialBadge({ platform }: { platform: string }) {
   if (short) {
     return (
       <span
-        className="inline-flex items-center justify-center rounded bg-slate-200 font-bold leading-none text-slate-600"
+        className="rt-social-badge inline-flex items-center justify-center rounded font-bold leading-none"
         style={{ width: 13, height: 13, fontSize: 7 }}
       >
         {short.toUpperCase()}
@@ -64,36 +63,33 @@ export function PreviewContact({ contact }: PreviewContactProps) {
 
   const socialItems = [
     contact.linkedin && { platform: 'linkedin', text: contact.linkedin, href: contactHref('url', contact.linkedin) },
-    contact.github && { platform: 'github', text: contact.github, href: contactHref('url', contact.github) },
+    contact.github   && { platform: 'github',   text: contact.github,   href: contactHref('url', contact.github) },
   ].filter(Boolean) as { platform: string; text: string; href: string }[]
 
   if (mainItems.length === 0 && socialItems.length === 0) return null
 
   return (
-    <div
-      className="flex flex-wrap items-center gap-x-4 gap-y-1 border-y border-slate-200 py-2.5 text-slate-600"
-      style={{ fontSize: 10.5 }}
-    >
+    <div className="rt-contact rt-border-contact flex flex-wrap items-center gap-x-4 gap-y-1 border-y py-2.5">
       {mainItems.map((item, i) =>
         item.href ? (
-          <a key={i} href={item.href} className="flex items-center gap-1 hover:text-blue-600 transition-colors">
-            <span className="text-slate-400">{item.icon}</span>
+          <a key={i} href={item.href} className="flex items-center gap-1">
+            <span className="rt-icon-muted">{item.icon}</span>
             {item.text}
           </a>
         ) : (
           <span key={i} className="flex items-center gap-1">
-            <span className="text-slate-400">{item.icon}</span>
+            <span className="rt-icon-muted">{item.icon}</span>
             {item.text}
           </span>
         ),
       )}
 
       {mainItems.length > 0 && socialItems.length > 0 && (
-        <span className="select-none text-slate-300">·</span>
+        <span className="rt-icon-muted select-none">·</span>
       )}
 
       {socialItems.map((item, i) => (
-        <a key={i} href={item.href} className="flex items-center gap-1 text-blue-600 hover:text-blue-700 transition-colors">
+        <a key={i} href={item.href} className="rt-social-link flex items-center gap-1">
           <SocialBadge platform={item.platform} />
           {item.text}
         </a>
