@@ -1,21 +1,18 @@
-import { ChevronDown, Trash2, GripVertical, ArrowUp, ArrowDown } from 'lucide-react'
+import { ChevronDown, Trash2, GripVertical } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/utils/cn'
+import type { DragHandleProps } from './SortableEntryList'
 
 interface EntryCardProps {
   title: string
   subtitle?: string
   meta?: string
   isExpanded: boolean
-  isFirst: boolean
-  isLast: boolean
   onToggle: () => void
   onDelete: () => void
-  onMoveUp: () => void
-  onMoveDown: () => void
   children: React.ReactNode
-  /** Optional drag handle attributes from dnd-kit */
-  dragHandleProps?: Record<string, unknown>
+  /** Provided by SortableEntryCard — spread onto the grip to enable drag. */
+  dragHandleProps?: DragHandleProps
 }
 
 export function EntryCard({
@@ -23,12 +20,8 @@ export function EntryCard({
   subtitle,
   meta,
   isExpanded,
-  isFirst,
-  isLast,
   onToggle,
   onDelete,
-  onMoveUp,
-  onMoveDown,
   children,
   dragHandleProps,
 }: EntryCardProps) {
@@ -46,13 +39,21 @@ export function EntryCard({
         role="button"
         aria-expanded={isExpanded}
         tabIndex={0}
-        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle() } }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle() }
+        }}
       >
-        {/* Drag handle — shows as grip, can receive dnd attributes */}
+        {/*
+         * Drag handle — stopPropagation prevents the card from toggling when
+         * the user grabs the grip. dragHandleProps spreads dnd-kit listeners
+         * + attributes (onPointerDown, onKeyDown, aria-roledescription, …).
+         */}
         <span
-          className="shrink-0 cursor-grab text-slate-300 active:cursor-grabbing"
+          className="shrink-0 cursor-grab touch-none text-slate-300 hover:text-slate-500 active:cursor-grabbing"
           onClick={(e) => e.stopPropagation()}
-          {...(dragHandleProps as React.HTMLAttributes<HTMLSpanElement>)}
+          title="Drag to reorder"
+          {...(dragHandleProps?.listeners)}
+          {...(dragHandleProps?.attributes)}
         >
           <GripVertical className="h-3.5 w-3.5" />
         </span>
@@ -76,28 +77,6 @@ export function EntryCard({
             type="button"
             variant="ghost"
             size="icon-sm"
-            onClick={onMoveUp}
-            disabled={isFirst}
-            className="text-slate-400"
-            title="Move up"
-          >
-            <ArrowUp className="h-3 w-3" />
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
-            onClick={onMoveDown}
-            disabled={isLast}
-            className="text-slate-400"
-            title="Move down"
-          >
-            <ArrowDown className="h-3 w-3" />
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
             onClick={onDelete}
             className="text-slate-400 hover:text-red-500"
             title="Delete"
@@ -115,9 +94,8 @@ export function EntryCard({
       </div>
 
       {/*
-       * Accordion body — always in DOM so form state / focus is preserved.
-       * Uses CSS grid row height trick: grid-template-rows 0fr→1fr is
-       * the only way to animate to unknown height without JS measurement.
+       * Accordion body — always in DOM so form state / focus survives.
+       * CSS grid-template-rows trick animates to unknown height without JS.
        */}
       <div
         className={cn(

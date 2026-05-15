@@ -10,7 +10,9 @@ import { EntryCard } from '@/editor/components/EntryCard'
 import { BulletListEditor } from '@/editor/components/BulletListEditor'
 import { SectionHeader } from '@/editor/components/SectionHeader'
 import { EmptyState } from '@/editor/components/EmptyState'
+import { SortableEntryList, SortableEntryCard, arrayMove } from '@/editor/components/SortableEntryList'
 import type { Project } from '@/types/resume'
+import type { SectionEditorProps } from '@/editor/SectionEditor'
 
 const SECTION_KEY = 'projects'
 
@@ -99,7 +101,7 @@ function ProjectEntryForm({ proj }: { proj: Project }) {
   )
 }
 
-export function ProjectsEditor() {
+export function ProjectsEditor({ section }: SectionEditorProps) {
   const { resume, addProject, removeProject, reorderProjects } = useResumeStore()
   const { expandedEntry, setExpandedEntry, toggleExpandedEntry } = useUIStore()
   const expandedId = expandedEntry[SECTION_KEY] ?? null
@@ -117,18 +119,11 @@ export function ProjectsEditor() {
     setExpandedEntry(SECTION_KEY, newProj.id)
   }
 
-  function move(index: number, direction: 'up' | 'down') {
-    const items = [...resume.projects]
-    const swap = direction === 'up' ? index - 1 : index + 1
-    ;[items[index], items[swap]] = [items[swap], items[index]]
-    reorderProjects(items)
-  }
-
   return (
     <div>
       <SectionHeader
-        title="Projects"
-        description="Portfolio, open-source, and side projects"
+        title={section.title}
+        description="Portfolio, open-source, and side projects · drag to reorder"
         onAdd={handleAdd}
         addLabel="Add Project"
       />
@@ -137,27 +132,32 @@ export function ProjectsEditor() {
         <EmptyState message="No projects yet." action="Add Project" />
       )}
 
-      <div className="space-y-2">
-        {resume.projects.map((proj, i) => (
-          <EntryCard
-            key={proj.id}
-            title={proj.name}
-            subtitle={proj.technologies.slice(0, 3).join(' · ')}
-            isExpanded={expandedId === proj.id}
-            isFirst={i === 0}
-            isLast={i === resume.projects.length - 1}
-            onToggle={() => toggleExpandedEntry(SECTION_KEY, proj.id)}
-            onDelete={() => {
-              removeProject(proj.id)
-              if (expandedId === proj.id) setExpandedEntry(SECTION_KEY, null)
-            }}
-            onMoveUp={() => move(i, 'up')}
-            onMoveDown={() => move(i, 'down')}
-          >
-            <ProjectEntryForm proj={proj} />
-          </EntryCard>
+      <SortableEntryList
+        ids={resume.projects.map((p) => p.id)}
+        onReorder={(from, to) =>
+          reorderProjects(arrayMove([...resume.projects], from, to))
+        }
+      >
+        {resume.projects.map((proj) => (
+          <SortableEntryCard key={proj.id} id={proj.id}>
+            {(handleProps) => (
+              <EntryCard
+                title={proj.name}
+                subtitle={proj.technologies.slice(0, 3).join(' · ')}
+                isExpanded={expandedId === proj.id}
+                onToggle={() => toggleExpandedEntry(SECTION_KEY, proj.id)}
+                onDelete={() => {
+                  removeProject(proj.id)
+                  if (expandedId === proj.id) setExpandedEntry(SECTION_KEY, null)
+                }}
+                dragHandleProps={handleProps}
+              >
+                <ProjectEntryForm proj={proj} />
+              </EntryCard>
+            )}
+          </SortableEntryCard>
         ))}
-      </div>
+      </SortableEntryList>
     </div>
   )
 }

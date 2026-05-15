@@ -50,7 +50,7 @@ export function CustomSectionEditor({ sectionId }: CustomSectionEditorProps) {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-sm font-semibold text-slate-900">Custom Section</h2>
+        <h2 className="text-sm font-semibold text-slate-900">{section?.title ?? 'Custom Section'}</h2>
         <p className="mt-0.5 text-xs text-slate-500">
           Free-form section — title and content are fully customisable
         </p>

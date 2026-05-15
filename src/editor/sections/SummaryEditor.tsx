@@ -3,8 +3,9 @@ import { useForm } from 'react-hook-form'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { useResumeStore } from '@/store/resumeStore'
+import type { SectionEditorProps } from '@/editor/SectionEditor'
 
-export function SummaryEditor() {
+export function SummaryEditor({ section }: SectionEditorProps) {
   const { resume, updateSummary } = useResumeStore()
 
   const { register, watch, reset } = useForm<{ summary: string }>({
@@ -27,7 +28,7 @@ export function SummaryEditor() {
   return (
     <div className="space-y-3">
       <div>
-        <h2 className="text-sm font-semibold text-slate-900">Professional Summary</h2>
+        <h2 className="text-sm font-semibold text-slate-900">{section.title}</h2>
         <p className="mt-0.5 text-xs text-slate-500">
           2–4 sentences that position you for the role
         </p>

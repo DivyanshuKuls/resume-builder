@@ -6,8 +6,10 @@ import { EntryCard } from '@/editor/components/EntryCard'
 import { BulletListEditor } from '@/editor/components/BulletListEditor'
 import { SectionHeader } from '@/editor/components/SectionHeader'
 import { EmptyState } from '@/editor/components/EmptyState'
+import { SortableEntryList, SortableEntryCard, arrayMove } from '@/editor/components/SortableEntryList'
 import { formatDateRange } from '@/utils/formatDate'
 import type { Experience } from '@/types/resume'
+import type { SectionEditorProps } from '@/editor/SectionEditor'
 
 const SECTION_KEY = 'experience'
 
@@ -56,7 +58,7 @@ function ExperienceEntryForm({ exp }: { exp: Experience }) {
         </div>
       </div>
 
-      <label className="flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
+      <label className="flex cursor-pointer items-center gap-2 text-xs text-slate-600">
         <input
           type="checkbox"
           checked={exp.current}
@@ -85,7 +87,7 @@ function ExperienceEntryForm({ exp }: { exp: Experience }) {
   )
 }
 
-export function ExperienceEditor() {
+export function ExperienceEditor({ section }: SectionEditorProps) {
   const { resume, addExperience, removeExperience, reorderExperience } = useResumeStore()
   const { expandedEntry, setExpandedEntry, toggleExpandedEntry } = useUIStore()
   const expandedId = expandedEntry[SECTION_KEY] ?? null
@@ -106,18 +108,11 @@ export function ExperienceEditor() {
     setExpandedEntry(SECTION_KEY, newExp.id)
   }
 
-  function move(index: number, direction: 'up' | 'down') {
-    const items = [...resume.experience]
-    const swap = direction === 'up' ? index - 1 : index + 1
-    ;[items[index], items[swap]] = [items[swap], items[index]]
-    reorderExperience(items)
-  }
-
   return (
     <div>
       <SectionHeader
-        title="Work Experience"
-        description="Most recent first"
+        title={section.title}
+        description="Most recent first · drag to reorder"
         onAdd={handleAdd}
         addLabel="Add Job"
       />
@@ -126,28 +121,33 @@ export function ExperienceEditor() {
         <EmptyState message="No experience entries yet." action="Add Job" />
       )}
 
-      <div className="space-y-2">
-        {resume.experience.map((exp, i) => (
-          <EntryCard
-            key={exp.id}
-            title={exp.position}
-            subtitle={exp.company}
-            meta={formatDateRange(exp.startDate, exp.endDate, exp.current)}
-            isExpanded={expandedId === exp.id}
-            isFirst={i === 0}
-            isLast={i === resume.experience.length - 1}
-            onToggle={() => toggleExpandedEntry(SECTION_KEY, exp.id)}
-            onDelete={() => {
-              removeExperience(exp.id)
-              if (expandedId === exp.id) setExpandedEntry(SECTION_KEY, null)
-            }}
-            onMoveUp={() => move(i, 'up')}
-            onMoveDown={() => move(i, 'down')}
-          >
-            <ExperienceEntryForm exp={exp} />
-          </EntryCard>
+      <SortableEntryList
+        ids={resume.experience.map((e) => e.id)}
+        onReorder={(from, to) =>
+          reorderExperience(arrayMove([...resume.experience], from, to))
+        }
+      >
+        {resume.experience.map((exp) => (
+          <SortableEntryCard key={exp.id} id={exp.id}>
+            {(handleProps) => (
+              <EntryCard
+                title={exp.position}
+                subtitle={exp.company}
+                meta={formatDateRange(exp.startDate, exp.endDate, exp.current)}
+                isExpanded={expandedId === exp.id}
+                onToggle={() => toggleExpandedEntry(SECTION_KEY, exp.id)}
+                onDelete={() => {
+                  removeExperience(exp.id)
+                  if (expandedId === exp.id) setExpandedEntry(SECTION_KEY, null)
+                }}
+                dragHandleProps={handleProps}
+              >
+                <ExperienceEntryForm exp={exp} />
+              </EntryCard>
+            )}
+          </SortableEntryCard>
         ))}
-      </div>
+      </SortableEntryList>
     </div>
   )
 }

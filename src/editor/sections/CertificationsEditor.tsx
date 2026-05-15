@@ -5,8 +5,10 @@ import { useUIStore } from '@/store/uiStore'
 import { EntryCard } from '@/editor/components/EntryCard'
 import { SectionHeader } from '@/editor/components/SectionHeader'
 import { EmptyState } from '@/editor/components/EmptyState'
+import { SortableEntryList, SortableEntryCard, arrayMove } from '@/editor/components/SortableEntryList'
 import { formatDate } from '@/utils/formatDate'
 import type { Certification } from '@/types/resume'
+import type { SectionEditorProps } from '@/editor/SectionEditor'
 
 const SECTION_KEY = 'certifications'
 
@@ -65,7 +67,7 @@ function CertEntryForm({ cert }: { cert: Certification }) {
   )
 }
 
-export function CertificationsEditor() {
+export function CertificationsEditor({ section }: SectionEditorProps) {
   const { resume, addCertification, removeCertification, reorderCertifications } = useResumeStore()
   const { expandedEntry, setExpandedEntry, toggleExpandedEntry } = useUIStore()
   const expandedId = expandedEntry[SECTION_KEY] ?? null
@@ -84,18 +86,11 @@ export function CertificationsEditor() {
     setExpandedEntry(SECTION_KEY, newCert.id)
   }
 
-  function move(index: number, direction: 'up' | 'down') {
-    const items = [...resume.certifications]
-    const swap = direction === 'up' ? index - 1 : index + 1
-    ;[items[index], items[swap]] = [items[swap], items[index]]
-    reorderCertifications(items)
-  }
-
   return (
     <div>
       <SectionHeader
-        title="Certifications"
-        description="Professional certifications and licences"
+        title={section.title}
+        description="Professional certifications and licences · drag to reorder"
         onAdd={handleAdd}
         addLabel="Add Certification"
       />
@@ -104,28 +99,33 @@ export function CertificationsEditor() {
         <EmptyState message="No certifications yet." action="Add Certification" />
       )}
 
-      <div className="space-y-2">
-        {resume.certifications.map((cert, i) => (
-          <EntryCard
-            key={cert.id}
-            title={cert.name}
-            subtitle={cert.issuer}
-            meta={formatDate(cert.date)}
-            isExpanded={expandedId === cert.id}
-            isFirst={i === 0}
-            isLast={i === resume.certifications.length - 1}
-            onToggle={() => toggleExpandedEntry(SECTION_KEY, cert.id)}
-            onDelete={() => {
-              removeCertification(cert.id)
-              if (expandedId === cert.id) setExpandedEntry(SECTION_KEY, null)
-            }}
-            onMoveUp={() => move(i, 'up')}
-            onMoveDown={() => move(i, 'down')}
-          >
-            <CertEntryForm cert={cert} />
-          </EntryCard>
+      <SortableEntryList
+        ids={resume.certifications.map((c) => c.id)}
+        onReorder={(from, to) =>
+          reorderCertifications(arrayMove([...resume.certifications], from, to))
+        }
+      >
+        {resume.certifications.map((cert) => (
+          <SortableEntryCard key={cert.id} id={cert.id}>
+            {(handleProps) => (
+              <EntryCard
+                title={cert.name}
+                subtitle={cert.issuer}
+                meta={formatDate(cert.date)}
+                isExpanded={expandedId === cert.id}
+                onToggle={() => toggleExpandedEntry(SECTION_KEY, cert.id)}
+                onDelete={() => {
+                  removeCertification(cert.id)
+                  if (expandedId === cert.id) setExpandedEntry(SECTION_KEY, null)
+                }}
+                dragHandleProps={handleProps}
+              >
+                <CertEntryForm cert={cert} />
+              </EntryCard>
+            )}
+          </SortableEntryCard>
         ))}
-      </div>
+      </SortableEntryList>
     </div>
   )
 }

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { useResumeStore } from '@/store/resumeStore'
 import { cn } from '@/utils/cn'
 import type { Skill, SkillGroup } from '@/types/resume'
+import type { SectionEditorProps } from '@/editor/SectionEditor'
 
 // ── Individual skills tag input ───────────────────────────────────────────────
 
@@ -152,7 +153,7 @@ function GroupRow({
 
 // ── Main editor ───────────────────────────────────────────────────────────────
 
-export function SkillsEditor() {
+export function SkillsEditor({ section }: SectionEditorProps) {
   const { resume, updateSkillsConfig, addSkillGroup, updateSkillGroup, removeSkillGroup } =
     useResumeStore()
   const { mode, headingStyle } = resume.skillsConfig
@@ -165,7 +166,7 @@ export function SkillsEditor() {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-sm font-semibold text-slate-900">Skills</h2>
+        <h2 className="text-sm font-semibold text-slate-900">{section.title}</h2>
         <p className="mt-0.5 text-xs text-slate-500">
           Add skills individually or organize them by category
         </p>

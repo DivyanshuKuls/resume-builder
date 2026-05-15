@@ -6,8 +6,10 @@ import { useUIStore } from '@/store/uiStore'
 import { EntryCard } from '@/editor/components/EntryCard'
 import { SectionHeader } from '@/editor/components/SectionHeader'
 import { EmptyState } from '@/editor/components/EmptyState'
+import { SortableEntryList, SortableEntryCard, arrayMove } from '@/editor/components/SortableEntryList'
 import { formatDate } from '@/utils/formatDate'
 import type { Achievement } from '@/types/resume'
+import type { SectionEditorProps } from '@/editor/SectionEditor'
 
 const SECTION_KEY = 'achievements'
 
@@ -48,7 +50,7 @@ function AchievementEntryForm({ ach }: { ach: Achievement }) {
   )
 }
 
-export function AchievementsEditor() {
+export function AchievementsEditor({ section }: SectionEditorProps) {
   const { resume, addAchievement, removeAchievement, reorderAchievements } = useResumeStore()
   const { expandedEntry, setExpandedEntry, toggleExpandedEntry } = useUIStore()
   const expandedId = expandedEntry[SECTION_KEY] ?? null
@@ -64,18 +66,11 @@ export function AchievementsEditor() {
     setExpandedEntry(SECTION_KEY, newAch.id)
   }
 
-  function move(index: number, direction: 'up' | 'down') {
-    const items = [...resume.achievements]
-    const swap = direction === 'up' ? index - 1 : index + 1
-    ;[items[index], items[swap]] = [items[swap], items[index]]
-    reorderAchievements(items)
-  }
-
   return (
     <div>
       <SectionHeader
-        title="Achievements"
-        description="Awards, recognitions, and notable accomplishments"
+        title={section.title}
+        description="Awards, recognitions, and notable accomplishments · drag to reorder"
         onAdd={handleAdd}
         addLabel="Add Achievement"
       />
@@ -84,27 +79,32 @@ export function AchievementsEditor() {
         <EmptyState message="No achievements yet." action="Add Achievement" />
       )}
 
-      <div className="space-y-2">
-        {resume.achievements.map((ach, i) => (
-          <EntryCard
-            key={ach.id}
-            title={ach.title}
-            meta={formatDate(ach.date)}
-            isExpanded={expandedId === ach.id}
-            isFirst={i === 0}
-            isLast={i === resume.achievements.length - 1}
-            onToggle={() => toggleExpandedEntry(SECTION_KEY, ach.id)}
-            onDelete={() => {
-              removeAchievement(ach.id)
-              if (expandedId === ach.id) setExpandedEntry(SECTION_KEY, null)
-            }}
-            onMoveUp={() => move(i, 'up')}
-            onMoveDown={() => move(i, 'down')}
-          >
-            <AchievementEntryForm ach={ach} />
-          </EntryCard>
+      <SortableEntryList
+        ids={resume.achievements.map((a) => a.id)}
+        onReorder={(from, to) =>
+          reorderAchievements(arrayMove([...resume.achievements], from, to))
+        }
+      >
+        {resume.achievements.map((ach) => (
+          <SortableEntryCard key={ach.id} id={ach.id}>
+            {(handleProps) => (
+              <EntryCard
+                title={ach.title}
+                meta={formatDate(ach.date)}
+                isExpanded={expandedId === ach.id}
+                onToggle={() => toggleExpandedEntry(SECTION_KEY, ach.id)}
+                onDelete={() => {
+                  removeAchievement(ach.id)
+                  if (expandedId === ach.id) setExpandedEntry(SECTION_KEY, null)
+                }}
+                dragHandleProps={handleProps}
+              >
+                <AchievementEntryForm ach={ach} />
+              </EntryCard>
+            )}
+          </SortableEntryCard>
         ))}
-      </div>
+      </SortableEntryList>
     </div>
   )
 }

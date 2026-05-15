@@ -6,8 +6,10 @@ import { EntryCard } from '@/editor/components/EntryCard'
 import { BulletListEditor } from '@/editor/components/BulletListEditor'
 import { SectionHeader } from '@/editor/components/SectionHeader'
 import { EmptyState } from '@/editor/components/EmptyState'
+import { SortableEntryList, SortableEntryCard, arrayMove } from '@/editor/components/SortableEntryList'
 import { formatDateRange } from '@/utils/formatDate'
 import type { Education } from '@/types/resume'
+import type { SectionEditorProps } from '@/editor/SectionEditor'
 
 const SECTION_KEY = 'education'
 
@@ -82,7 +84,7 @@ function EducationEntryForm({ edu }: { edu: Education }) {
   )
 }
 
-export function EducationEditor() {
+export function EducationEditor({ section }: SectionEditorProps) {
   const { resume, addEducation, removeEducation, reorderEducation } = useResumeStore()
   const { expandedEntry, setExpandedEntry, toggleExpandedEntry } = useUIStore()
   const expandedId = expandedEntry[SECTION_KEY] ?? null
@@ -102,18 +104,11 @@ export function EducationEditor() {
     setExpandedEntry(SECTION_KEY, newEdu.id)
   }
 
-  function move(index: number, direction: 'up' | 'down') {
-    const items = [...resume.education]
-    const swap = direction === 'up' ? index - 1 : index + 1
-    ;[items[index], items[swap]] = [items[swap], items[index]]
-    reorderEducation(items)
-  }
-
   return (
     <div>
       <SectionHeader
-        title="Education"
-        description="Degrees, diplomas, and certificates"
+        title={section.title}
+        description="Degrees, diplomas, and certificates · drag to reorder"
         onAdd={handleAdd}
         addLabel="Add Education"
       />
@@ -122,28 +117,33 @@ export function EducationEditor() {
         <EmptyState message="No education entries yet." action="Add Education" />
       )}
 
-      <div className="space-y-2">
-        {resume.education.map((edu, i) => (
-          <EntryCard
-            key={edu.id}
-            title={[edu.degree, edu.field].filter(Boolean).join(' in ') || 'Untitled'}
-            subtitle={edu.institution}
-            meta={formatDateRange(edu.startDate, edu.endDate, false)}
-            isExpanded={expandedId === edu.id}
-            isFirst={i === 0}
-            isLast={i === resume.education.length - 1}
-            onToggle={() => toggleExpandedEntry(SECTION_KEY, edu.id)}
-            onDelete={() => {
-              removeEducation(edu.id)
-              if (expandedId === edu.id) setExpandedEntry(SECTION_KEY, null)
-            }}
-            onMoveUp={() => move(i, 'up')}
-            onMoveDown={() => move(i, 'down')}
-          >
-            <EducationEntryForm edu={edu} />
-          </EntryCard>
+      <SortableEntryList
+        ids={resume.education.map((e) => e.id)}
+        onReorder={(from, to) =>
+          reorderEducation(arrayMove([...resume.education], from, to))
+        }
+      >
+        {resume.education.map((edu) => (
+          <SortableEntryCard key={edu.id} id={edu.id}>
+            {(handleProps) => (
+              <EntryCard
+                title={[edu.degree, edu.field].filter(Boolean).join(' in ') || 'Untitled'}
+                subtitle={edu.institution}
+                meta={formatDateRange(edu.startDate, edu.endDate, false)}
+                isExpanded={expandedId === edu.id}
+                onToggle={() => toggleExpandedEntry(SECTION_KEY, edu.id)}
+                onDelete={() => {
+                  removeEducation(edu.id)
+                  if (expandedId === edu.id) setExpandedEntry(SECTION_KEY, null)
+                }}
+                dragHandleProps={handleProps}
+              >
+                <EducationEntryForm edu={edu} />
+              </EntryCard>
+            )}
+          </SortableEntryCard>
         ))}
-      </div>
+      </SortableEntryList>
     </div>
   )
 }
