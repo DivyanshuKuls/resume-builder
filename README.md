@@ -144,23 +144,19 @@ Click the **Download PDF** button in the preview panel toolbar. This opens the b
 
 ## Architecture Highlights
 
-### Registry-driven rendering
+### Registry-driven sections
 
-Both the editor and preview use a registry pattern — a `Record<SectionType, Component>` map. `SectionEditor.tsx` and `SectionRenderer.tsx` look up the right component at runtime. Adding a new section type means registering it in both maps; no switch statements or conditionals.
+Both editor and preview use a `Record<SectionType, Component>` map for dispatch. Adding a section type means registering it in both maps — no switch statements or conditionals.
 
-See [`docs/architecture.md`](docs/architecture.md) for the full breakdown.
+### Semantic theme system
 
-### Theme token system
+A token pipeline computes `--rt-*` CSS custom properties and applies them to `.resume-paper`. Renderer components use `rt-*` semantic classes only — they are theme-agnostic by construction.
 
-`computeThemeCSSVars()` loads a preset, applies user overrides, and returns a flat map of CSS custom properties injected onto `.resume-paper`. All renderer components use semantic `rt-*` CSS classes that reference these variables — renderers are theme-agnostic by construction.
+### Browser-native PDF
 
-### Semantic styling
+PDF export uses the browser print dialog — no canvas conversion or server rendering. A4 page-break safety is handled entirely in CSS.
 
-`rt-*` classes (e.g., `rt-name`, `rt-entry-title`, `rt-section-rule`) are defined in `index.css` and map to CSS variables. No Tailwind utilities appear in renderer output. This keeps theme switching instantaneous and keeps renderers readable.
-
-### Print-safe rendering
-
-CSS `break-inside: avoid` on `.resume-entry` and `break-after: avoid` on `.resume-section-heading` prevent awkward page splits. `print-color-adjust: exact` preserves background colors (skill pills, photo). The entire PDF pipeline is browser-native — no canvas conversion or server rendering.
+See [`docs/architecture.md`](docs/architecture.md) for the full system design.
 
 ---
 
@@ -173,6 +169,21 @@ CSS `break-inside: avoid` on `.resume-entry` and `break-after: avoid` on `.resum
 | [`docs/roadmap.md`](docs/roadmap.md) | Phase-by-phase future roadmap |
 | [`docs/changelog.md`](docs/changelog.md) | Development history by commit phase |
 | [`TECH_DEBT.md`](TECH_DEBT.md) | Known architectural gaps, severity, and recommended solutions |
+
+---
+
+## AI-Assisted Engineering
+
+This project uses structured AI workflow files to preserve architecture consistency and documentation quality across AI-assisted sessions.
+
+| File | Role |
+|------|------|
+| [`CLAUDE.md`](CLAUDE.md) | Persistent guidance for Claude-assisted engineering |
+| [`AGENTS.md`](AGENTS.md) | Architecture principles and constraints for AI agents |
+| [`.ai/system/`](.ai/system/) | Strict engineering rules — architecture, testing, documentation |
+| [`.ai/workflows/`](.ai/workflows/) | Post-feature sync and documentation update workflows |
+
+These files ensure AI-assisted changes stay architecturally consistent, avoid documentation drift, and support scalable engineering workflows.
 
 ---
 
