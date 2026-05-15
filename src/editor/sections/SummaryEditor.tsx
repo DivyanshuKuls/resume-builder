@@ -2,11 +2,12 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { useResumeStore } from '@/store/resumeStore'
+import { useResume, useResumeActions } from '@/hooks/useResume'
 import type { SectionEditorProps } from '@/editor/SectionEditor'
 
 export function SummaryEditor({ section }: SectionEditorProps) {
-  const { resume, updateSummary } = useResumeStore()
+  const resume = useResume()
+  const { updateSummary } = useResumeActions()
 
   const { register, watch, reset } = useForm<{ summary: string }>({
     defaultValues: { summary: resume.summary },

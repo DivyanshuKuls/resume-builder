@@ -21,7 +21,7 @@ import type {
 import { sampleResume } from '@/utils/defaults'
 import { SECTION_TYPE_META } from '@/types/resume'
 
-interface ResumeStore {
+export interface ResumeStore {
   resume: Resume
   activeSection: string
 

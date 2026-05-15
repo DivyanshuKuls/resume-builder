@@ -4,7 +4,7 @@ import { Camera, X } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { useResumeStore } from '@/store/resumeStore'
+import { useResume, useResumeActions } from '@/hooks/useResume'
 import { cn } from '@/utils/cn'
 import type { PersonalInfo, PhotoAlignment } from '@/types/resume'
 
@@ -15,7 +15,8 @@ const ALIGNMENT_OPTIONS: { value: PhotoAlignment; label: string }[] = [
 ]
 
 export function PersonalInfoEditor() {
-  const { resume, updatePersonalInfo, updatePhoto } = useResumeStore()
+  const resume = useResume()
+  const { updatePersonalInfo, updatePhoto } = useResumeActions()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const { register, watch, reset } = useForm<Pick<PersonalInfo, 'fullName' | 'jobTitle'>>({

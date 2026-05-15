@@ -20,7 +20,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { Eye, EyeOff, Trash2, Plus, GripVertical } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useResumeStore } from '@/store/resumeStore'
+import { useResume, useResumeActions } from '@/hooks/useResume'
 import { cn } from '@/utils/cn'
 import { SECTION_TYPE_META } from '@/types/resume'
 import type { SectionConfig, SectionType } from '@/types/resume'
@@ -39,7 +39,7 @@ const ADDABLE_TYPES: SectionType[] = [
 // ── Sortable row ──────────────────────────────────────────────────────────────
 
 function SortableSectionRow({ section }: { section: SectionConfig }) {
-  const { toggleSectionVisibility, removeSection, updateSectionConfig } = useResumeStore()
+  const { toggleSectionVisibility, removeSection, updateSectionConfig } = useResumeActions()
   const [editingTitle, setEditingTitle] = useState(false)
   const [draft, setDraft] = useState(section.title)
 
@@ -149,7 +149,8 @@ function SortableSectionRow({ section }: { section: SectionConfig }) {
 // ── SectionManager ────────────────────────────────────────────────────────────
 
 export function SectionManager() {
-  const { resume, reorderSections, addSection } = useResumeStore()
+  const resume = useResume()
+  const { reorderSections, addSection } = useResumeActions()
   const [showAddMenu, setShowAddMenu] = useState(false)
 
   const sorted = [...resume.sections].sort((a, b) => a.order - b.order)

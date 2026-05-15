@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useResumeStore } from '@/store/resumeStore'
+import { useResume, useResumeActions } from '@/hooks/useResume'
 import { useUIStore } from '@/store/uiStore'
 import { EntryCard } from '@/editor/components/EntryCard'
 import { SectionHeader } from '@/editor/components/SectionHeader'
@@ -13,7 +13,7 @@ import type { SectionEditorProps } from '@/editor/SectionEditor'
 const SECTION_KEY = 'certifications'
 
 function CertEntryForm({ cert }: { cert: Certification }) {
-  const { updateCertification } = useResumeStore()
+  const { updateCertification } = useResumeActions()
   const upd = (data: Partial<Certification>) => updateCertification(cert.id, data)
 
   return (
@@ -68,7 +68,8 @@ function CertEntryForm({ cert }: { cert: Certification }) {
 }
 
 export function CertificationsEditor({ section }: SectionEditorProps) {
-  const { resume, addCertification, removeCertification, reorderCertifications } = useResumeStore()
+  const resume = useResume()
+  const { addCertification, removeCertification, reorderCertifications } = useResumeActions()
   const { expandedEntry, setExpandedEntry, toggleExpandedEntry } = useUIStore()
   const expandedId = expandedEntry[SECTION_KEY] ?? null
 

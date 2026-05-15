@@ -1,26 +1,17 @@
-import { useResumeStore } from '@/store/resumeStore'
+import { useResume, useResumeSelectors } from '@/hooks/useResume'
 import { PersonalInfoEditor } from '@/editor/sections/PersonalInfoEditor'
 import { ContactEditor } from '@/editor/sections/ContactEditor'
-import { SummaryEditor } from '@/editor/sections/SummaryEditor'
-import { SkillsEditor } from '@/editor/sections/SkillsEditor'
-import { ExperienceEditor } from '@/editor/sections/ExperienceEditor'
-import { ProjectsEditor } from '@/editor/sections/ProjectsEditor'
-import { EducationEditor } from '@/editor/sections/EducationEditor'
-import { CertificationsEditor } from '@/editor/sections/CertificationsEditor'
-import { AchievementsEditor } from '@/editor/sections/AchievementsEditor'
-import { CustomSectionEditor } from '@/editor/sections/CustomSectionEditor'
 import { SectionManager } from '@/editor/SectionManager'
 import { ThemeEditor } from '@/editor/sections/ThemeEditor'
 import { PlaceholderEditor } from '@/editor/sections/PlaceholderEditor'
-import type { SectionConfig } from '@/types/resume'
+import { SECTION_EDITORS } from '@/editor/sections'
 
-/** Props shared by all section content editors that edit a named body section. */
-export interface SectionEditorProps {
-  section: SectionConfig
-}
+// Re-exported for backward compatibility — section editors import this type from here
+export type { SectionEditorProps } from '@/editor/sections'
 
 export function SectionEditor() {
-  const { resume, activeSection } = useResumeStore()
+  const resume = useResume()
+  const { activeSection } = useResumeSelectors()
 
   // Fixed navigation targets — not backed by a SectionConfig
   switch (activeSection) {
@@ -36,16 +27,10 @@ export function SectionEditor() {
     return <PlaceholderEditor section="Section" description="Select a section from the left to start editing." />
   }
 
-  switch (section.type) {
-    case 'summary':        return <SummaryEditor        section={section} />
-    case 'skills':         return <SkillsEditor         section={section} />
-    case 'experience':     return <ExperienceEditor     section={section} />
-    case 'projects':       return <ProjectsEditor       section={section} />
-    case 'education':      return <EducationEditor      section={section} />
-    case 'certifications': return <CertificationsEditor section={section} />
-    case 'achievements':   return <AchievementsEditor   section={section} />
-    case 'custom':         return <CustomSectionEditor  sectionId={activeSection} />
-    default:
-      return <PlaceholderEditor section={section.title} description="Editor not implemented yet." />
+  const ContentEditor = SECTION_EDITORS[section.type]
+  if (!ContentEditor) {
+    return <PlaceholderEditor section={section.title} description="Editor not implemented yet." />
   }
+
+  return <ContentEditor section={section} />
 }

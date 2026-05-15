@@ -3,7 +3,7 @@ import { Plus, X } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { useResumeStore } from '@/store/resumeStore'
+import { useResume, useResumeActions } from '@/hooks/useResume'
 import { cn } from '@/utils/cn'
 import type { Skill, SkillGroup } from '@/types/resume'
 import type { SectionEditorProps } from '@/editor/SectionEditor'
@@ -11,7 +11,8 @@ import type { SectionEditorProps } from '@/editor/SectionEditor'
 // ── Individual skills tag input ───────────────────────────────────────────────
 
 function IndividualSkills() {
-  const { resume, setSkills } = useResumeStore()
+  const resume = useResume()
+  const { setSkills } = useResumeActions()
   const [input, setInput] = useState('')
 
   function addSkill() {

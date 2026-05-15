@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useResumeStore } from '@/store/resumeStore'
+import { useResume, useResumeActions } from '@/hooks/useResume'
 import { isValidEmail, isValidUrl } from '@/utils/validate'
 import type { ContactDetails } from '@/types/resume'
 
@@ -11,7 +11,8 @@ function FieldHint({ message }: { message: string }) {
 }
 
 export function ContactEditor() {
-  const { resume, updateContact } = useResumeStore()
+  const resume = useResume()
+  const { updateContact } = useResumeActions()
 
   const { register, watch, reset, formState: { touchedFields } } = useForm<ContactDetails>({
     defaultValues: resume.contact,

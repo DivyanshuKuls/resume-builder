@@ -1,6 +1,7 @@
 import { User, Phone, LayoutList, Palette } from 'lucide-react'
 import { cn } from '@/utils/cn'
-import { useResumeStore } from '@/store/resumeStore'
+import { useResume, useResumeActions, useResumeSelectors } from '@/hooks/useResume'
+import { hasSectionContent } from '@/utils/sectionContent'
 import type { Resume } from '@/types/resume'
 
 // ── Fixed nav items ───────────────────────────────────────────────────────────
@@ -44,25 +45,6 @@ const BOTTOM_ITEMS: FixedNavItem[] = [
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function hasData(resumeData: Resume, sectionId: string): boolean {
-  const sec = resumeData.sections.find((s) => s.id === sectionId)
-  if (!sec) return false
-  switch (sec.type) {
-    case 'summary':        return !!resumeData.summary
-    case 'experience':     return resumeData.experience.length > 0
-    case 'education':      return resumeData.education.length > 0
-    case 'skills':         return resumeData.skills.length > 0 || resumeData.skillGroups.some(g => g.skills.length > 0)
-    case 'projects':       return resumeData.projects.length > 0
-    case 'certifications': return resumeData.certifications.length > 0
-    case 'achievements':   return resumeData.achievements.length > 0
-    case 'custom': {
-      const cs = resumeData.customSections.find((c) => c.id === sectionId)
-      return !!(cs?.content)
-    }
-    default: return false
-  }
-}
-
 function hasFixedData(resumeData: Resume, id: string): boolean {
   if (id === 'personalInfo') return !!(resumeData.personalInfo.fullName || resumeData.personalInfo.jobTitle)
   if (id === 'contact') return !!(resumeData.contact.email || resumeData.contact.phone)
@@ -88,7 +70,7 @@ function NavButton({
   filled: boolean
   dimmed?: boolean
 }) {
-  const setActiveSection = useResumeStore((s) => s.setActiveSection)
+  const { setActiveSection } = useResumeActions()
 
   return (
     <button
@@ -143,7 +125,8 @@ function NavButton({
 // ── EditorNav ─────────────────────────────────────────────────────────────────
 
 export function EditorNav() {
-  const { resume, activeSection } = useResumeStore()
+  const resume = useResume()
+  const { activeSection } = useResumeSelectors()
 
   const sortedSections = [...resume.sections].sort((a, b) => a.order - b.order)
 
@@ -178,7 +161,7 @@ export function EditorNav() {
             </span>
           }
           isActive={activeSection === sec.id}
-          filled={hasData(resume, sec.id)}
+          filled={hasSectionContent(resume, sec)}
           dimmed={!sec.visible}
         />
       ))}

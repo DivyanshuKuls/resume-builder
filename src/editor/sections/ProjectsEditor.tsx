@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { useResumeStore } from '@/store/resumeStore'
+import { useResume, useResumeActions } from '@/hooks/useResume'
 import { useUIStore } from '@/store/uiStore'
 import { EntryCard } from '@/editor/components/EntryCard'
 import { BulletListEditor } from '@/editor/components/BulletListEditor'
@@ -17,7 +17,7 @@ import type { SectionEditorProps } from '@/editor/SectionEditor'
 const SECTION_KEY = 'projects'
 
 function ProjectEntryForm({ proj }: { proj: Project }) {
-  const { updateProject } = useResumeStore()
+  const { updateProject } = useResumeActions()
   const upd = (data: Partial<Project>) => updateProject(proj.id, data)
   const [techInput, setTechInput] = useState('')
 
@@ -102,7 +102,8 @@ function ProjectEntryForm({ proj }: { proj: Project }) {
 }
 
 export function ProjectsEditor({ section }: SectionEditorProps) {
-  const { resume, addProject, removeProject, reorderProjects } = useResumeStore()
+  const resume = useResume()
+  const { addProject, removeProject, reorderProjects } = useResumeActions()
   const { expandedEntry, setExpandedEntry, toggleExpandedEntry } = useUIStore()
   const expandedId = expandedEntry[SECTION_KEY] ?? null
 

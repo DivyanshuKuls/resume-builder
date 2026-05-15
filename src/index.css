@@ -35,8 +35,12 @@
 /* ─── A4 paper – screen simulation ──────────────────────────────────────── */
 /*
  * A4 at 96 DPI = 794 × 1123 px.
- * Padding 56px × 64px ≈ 14.8mm × 16.9mm — safely inside printable bounds.
- * Font and color cascade from CSS vars set by the theme engine.
+ * Padding 56px × 64px ≈ 14.8mm × 16.9mm — within printable bounds.
+ * Font and color cascade from CSS vars injected by the theme engine.
+ *
+ * print-color-adjust: exact — tells the browser to preserve ALL background
+ * colors and images (skill pills, bullet dots, rule line, avatar bg, badges).
+ * Without this, backgrounds are stripped in every major browser by default.
  */
 .resume-paper {
   width: 794px;
@@ -49,25 +53,41 @@
     0 4px 20px -4px rgba(0, 0, 0, 0.12),
     0 16px 48px -8px rgba(0, 0, 0, 0.06);
   flex-shrink: 0;
-  /* Typography driven by CSS vars — fallbacks match the 'classic' preset */
+
   font-family: var(--rt-font-family, 'Inter', system-ui, sans-serif);
   font-size: var(--rt-font-size-base, 11px);
   line-height: var(--rt-line-height, 1.55);
   color: var(--rt-color-body, #374151);
   -webkit-font-smoothing: antialiased;
 
-  /* Prevent content from overflowing the paper */
-  overflow: hidden;
-  /* Wrap long words / URLs instead of overflowing */
+  /* Preserve all background colors, images, and borders in print */
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+
+  /* overflow-x hidden prevents long content (URLs) from creating horizontal
+     scroll. min-height (not height) means the element still grows vertically
+     for multi-page resumes — no vertical clipping occurs. */
+  overflow-x: hidden;
   overflow-wrap: break-word;
   word-break: break-word;
+}
+
+/* Long URLs inside anchors should wrap rather than overflow */
+.resume-paper a {
+  word-break: break-all;
+  text-decoration: none;
+}
+
+/* Flex children cannot shrink past zero width */
+.resume-paper * {
+  min-width: 0;
 }
 
 /* ─── Resume theme semantic classes ─────────────────────────────────────── */
 /*
  * Renderers use these instead of hardcoded Tailwind colour/size utilities.
  * Each class maps a semantic role to a CSS var, keeping renderers decoupled
- * from theme logic. Layout classes (flex, gap, mt-*) stay in Tailwind.
+ * from theme logic. Layout classes (flex, gap, mt-*) remain in Tailwind.
  */
 
 .rt-name {
@@ -154,6 +174,10 @@
   color: var(--rt-color-primary, #1e3a5f);
 }
 
+.rt-avatar-border {
+  border-color: var(--rt-color-border, #d1d5db);
+}
+
 .rt-social-link {
   color: var(--rt-color-link, #1e3a5f);
 }
@@ -175,26 +199,44 @@
   margin-top: var(--rt-spacing-item-gap, 4px);
 }
 
-/* Long URLs inside anchors can overflow on narrow sections */
-.resume-paper a {
-  word-break: break-all;
-  text-decoration: none;
+/* ─── Print control utility classes ─────────────────────────────────────── */
+/*
+ * These classes are placed on resume elements to control page-break behaviour.
+ * They are no-ops on screen and activate only in print/PDF output.
+ * Use them in renderers or wrappers — never inside the theme token system.
+ *
+ * .print-avoid-break   — keep the element whole on one page (default for entries)
+ * .print-break-before  — force a new page before this element
+ * .print-break-after   — force a new page after this element
+ */
+.print-avoid-break {
+  break-inside: avoid;
+  page-break-inside: avoid;   /* legacy Safari / older Chromium */
 }
 
-/* Ensure flex children cannot overflow their parent */
-.resume-paper * {
-  min-width: 0;
+.print-break-before {
+  break-before: page;
+  page-break-before: always;
+}
+
+.print-break-after {
+  break-after: page;
+  page-break-after: always;
 }
 
 /* ─── Print styles ───────────────────────────────────────────────────────── */
 @media print {
-  /* Physical A4 with no browser margins — resume-paper padding is the margin */
+  /*
+   * @page zero margins — the resume-paper padding becomes the document margin.
+   * This matches the 15mm padding set on .resume-paper below, giving a clean
+   * A4 page with no browser-added white space around the edges.
+   */
   @page {
     size: A4 portrait;
     margin: 0;
   }
 
-  /* Strip app chrome */
+  /* Strip all app chrome (header, editor, toolbars, toasts) */
   .no-print {
     display: none !important;
   }
@@ -205,7 +247,12 @@
     padding: 0;
   }
 
-  /* Match screen paper to physical A4 */
+  /*
+   * Screen paper → physical A4.
+   * 794px screen width → 210mm physical.
+   * Padding 15mm ≈ the default printable margin for most printers.
+   * overflow: visible so content beyond the first page continues naturally.
+   */
   .resume-paper {
     width: 210mm !important;
     min-height: 297mm !important;
@@ -214,18 +261,51 @@
     box-shadow: none !important;
     border-radius: 0 !important;
     overflow: visible !important;
+    /* Ensure paragraph text doesn't orphan/widow across pages */
     orphans: 3;
     widows: 3;
   }
 
-  /* Prevent a section heading from being orphaned at page bottom */
-  .resume-section {
-    break-inside: avoid;
+  /*
+   * Section heading page-break rules.
+   *
+   * break-after: avoid — the heading is ALWAYS followed by content on the
+   * same page. If there isn't room, the entire heading moves to the next page.
+   *
+   * This replaces the old `break-inside: avoid` on .resume-section, which
+   * prevented long sections (e.g. 8 experience entries) from spanning pages,
+   * causing them to overflow the first page entirely.
+   */
+  .resume-section-heading {
+    break-after: avoid;
+    page-break-after: avoid;
   }
 
-  /* Prevent a single entry from splitting across pages */
+  /*
+   * Individual entries do not split across pages.
+   * A 4-bullet experience entry always stays on one page as a unit.
+   */
   .resume-entry {
     break-inside: avoid;
-    page-break-inside: avoid; /* legacy fallback */
+    page-break-inside: avoid;
+  }
+
+  /*
+   * Suppress the browser default of appending `(href)` after every link
+   * in print output. Resume links are already visible as text; the appended
+   * URL would duplicate them and break layout in the contact strip.
+   */
+  .resume-paper a[href]::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  /*
+   * Ensure SVG icons (Lucide) inherit the correct color and are not replaced
+   * by grey fallback glyphs in some browsers' high-contrast print mode.
+   */
+  .resume-paper svg {
+    color: inherit;
+    fill: currentColor;
   }
 }

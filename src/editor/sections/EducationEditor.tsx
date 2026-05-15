@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useResumeStore } from '@/store/resumeStore'
+import { useResume, useResumeActions } from '@/hooks/useResume'
 import { useUIStore } from '@/store/uiStore'
 import { EntryCard } from '@/editor/components/EntryCard'
 import { BulletListEditor } from '@/editor/components/BulletListEditor'
@@ -14,7 +14,7 @@ import type { SectionEditorProps } from '@/editor/SectionEditor'
 const SECTION_KEY = 'education'
 
 function EducationEntryForm({ edu }: { edu: Education }) {
-  const { updateEducation } = useResumeStore()
+  const { updateEducation } = useResumeActions()
   const upd = (data: Partial<Education>) => updateEducation(edu.id, data)
 
   return (
@@ -85,7 +85,8 @@ function EducationEntryForm({ edu }: { edu: Education }) {
 }
 
 export function EducationEditor({ section }: SectionEditorProps) {
-  const { resume, addEducation, removeEducation, reorderEducation } = useResumeStore()
+  const resume = useResume()
+  const { addEducation, removeEducation, reorderEducation } = useResumeActions()
   const { expandedEntry, setExpandedEntry, toggleExpandedEntry } = useUIStore()
   const expandedId = expandedEntry[SECTION_KEY] ?? null
 

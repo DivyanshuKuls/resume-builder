@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useResumeStore } from '@/store/resumeStore'
+import { useResume, useResumeActions } from '@/hooks/useResume'
 import { useUIStore } from '@/store/uiStore'
 import { EntryCard } from '@/editor/components/EntryCard'
 import { BulletListEditor } from '@/editor/components/BulletListEditor'
@@ -14,7 +14,7 @@ import type { SectionEditorProps } from '@/editor/SectionEditor'
 const SECTION_KEY = 'experience'
 
 function ExperienceEntryForm({ exp }: { exp: Experience }) {
-  const { updateExperience } = useResumeStore()
+  const { updateExperience } = useResumeActions()
   const upd = (data: Partial<Experience>) => updateExperience(exp.id, data)
 
   return (
@@ -88,7 +88,8 @@ function ExperienceEntryForm({ exp }: { exp: Experience }) {
 }
 
 export function ExperienceEditor({ section }: SectionEditorProps) {
-  const { resume, addExperience, removeExperience, reorderExperience } = useResumeStore()
+  const resume = useResume()
+  const { addExperience, removeExperience, reorderExperience } = useResumeActions()
   const { expandedEntry, setExpandedEntry, toggleExpandedEntry } = useUIStore()
   const expandedId = expandedEntry[SECTION_KEY] ?? null
 

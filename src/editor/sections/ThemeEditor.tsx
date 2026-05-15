@@ -1,5 +1,5 @@
 import { cn } from '@/utils/cn'
-import { useResumeStore } from '@/store/resumeStore'
+import { useResume, useResumeActions } from '@/hooks/useResume'
 import { THEME_PRESETS } from '@/themes'
 import type { BuiltInThemeId } from '@/types/resume'
 
@@ -75,7 +75,8 @@ function ColorField({
 }
 
 export function ThemeEditor() {
-  const { resume, updateTheme } = useResumeStore()
+  const resume = useResume()
+  const { updateTheme } = useResumeActions()
   const { theme } = resume
 
   const activePreset = THEME_PRESETS[theme.preset ?? 'classic']

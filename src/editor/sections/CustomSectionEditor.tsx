@@ -3,14 +3,13 @@ import { useForm } from 'react-hook-form'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useResumeStore } from '@/store/resumeStore'
+import { useResume, useResumeActions } from '@/hooks/useResume'
+import type { SectionEditorProps } from './types'
 
-interface CustomSectionEditorProps {
-  sectionId: string
-}
-
-export function CustomSectionEditor({ sectionId }: CustomSectionEditorProps) {
-  const { resume, updateCustomSection, updateSectionConfig } = useResumeStore()
+export function CustomSectionEditor({ section: sectionProp }: SectionEditorProps) {
+  const sectionId = sectionProp.id
+  const resume = useResume()
+  const { updateCustomSection, updateSectionConfig } = useResumeActions()
 
   const section = resume.sections.find((s) => s.id === sectionId)
   const customData = resume.customSections.find((c) => c.id === sectionId)

@@ -5,10 +5,10 @@ import { AppHeader } from '@/components/layout/AppHeader'
 import { EditorPanel } from '@/editor/EditorPanel'
 import { PreviewPanel } from '@/preview/PreviewPanel'
 import { Toaster } from '@/components/ui/Toaster'
-import { useResumeStore } from '@/store/resumeStore'
+import { useResume } from '@/hooks/useResume'
 
 export default function App() {
-  const resume = useResumeStore((s) => s.resume)
+  const resume = useResume()
   const printRef = useRef<HTMLDivElement>(null)
 
   const handlePrint = useReactToPrint({
@@ -23,7 +23,7 @@ export default function App() {
       <AppLayout
         header={<AppHeader onPrint={() => handlePrint()} />}
         editor={<EditorPanel />}
-        preview={<PreviewPanel ref={printRef} />}
+        preview={<PreviewPanel ref={printRef} onPrint={() => handlePrint()} />}
       />
       <Toaster />
     </>

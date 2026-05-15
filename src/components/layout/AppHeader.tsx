@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from 'react'
 import { Download, FileText, Upload, FolderOpen, Check, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { useResumeStore } from '@/store/resumeStore'
+import { useResume, useResumeActions } from '@/hooks/useResume'
 import { useToast } from '@/hooks/useToast'
 import { exportResumeJSON, readJSONFile, parseResumeJSON } from '@/utils/importExport'
 
@@ -11,7 +11,7 @@ interface AppHeaderProps {
 
 /** Shows "Saving…" briefly then "Saved ✓" after any resume change. */
 function AutoSaveIndicator() {
-  const updatedAt = useResumeStore((s) => s.resume.updatedAt)
+  const { updatedAt } = useResume()
   const [state, setState] = useState<'idle' | 'saving' | 'saved'>('idle')
 
   useEffect(() => {
@@ -35,7 +35,8 @@ function AutoSaveIndicator() {
 }
 
 export function AppHeader({ onPrint }: AppHeaderProps) {
-  const { resume, resetToSample, clearResume, importResume } = useResumeStore()
+  const resume = useResume()
+  const { resetToSample, clearResume, importResume } = useResumeActions()
   const toast = useToast()
   const importInputRef = useRef<HTMLInputElement>(null)
 
