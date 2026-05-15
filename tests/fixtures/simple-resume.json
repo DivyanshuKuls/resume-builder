@@ -1,0 +1,71 @@
+{
+  "id": "fixture-simple",
+  "title": "Simple Resume",
+  "createdAt": "2024-01-01T00:00:00.000Z",
+  "updatedAt": "2024-01-01T00:00:00.000Z",
+  "personalInfo": {
+    "fullName": "Jane Smith",
+    "jobTitle": "Frontend Developer",
+    "photo": "",
+    "photoAlignment": "left"
+  },
+  "contact": {
+    "email": "jane.smith@example.com",
+    "phone": "+1 555 100 2000",
+    "address": "Austin, TX",
+    "website": "",
+    "github": "github.com/janesmith",
+    "linkedin": ""
+  },
+  "summary": "Frontend developer with 3 years of experience building responsive web apps with React and TypeScript.",
+  "skills": [
+    { "id": "s1", "name": "React" },
+    { "id": "s2", "name": "TypeScript" },
+    { "id": "s3", "name": "CSS" }
+  ],
+  "skillGroups": [],
+  "skillsConfig": { "mode": "individual", "headingStyle": "inline" },
+  "experience": [
+    {
+      "id": "e1",
+      "company": "WebAgency",
+      "position": "Frontend Developer",
+      "startDate": "2022-03",
+      "endDate": "",
+      "current": true,
+      "location": "Austin, TX",
+      "description": "",
+      "highlights": [
+        "Built reusable component library used across 5 product teams",
+        "Reduced page load time by 35% through lazy loading and code splitting"
+      ]
+    }
+  ],
+  "projects": [],
+  "education": [
+    {
+      "id": "edu1",
+      "institution": "Texas State University",
+      "degree": "B.S.",
+      "field": "Computer Science",
+      "startDate": "2018-09",
+      "endDate": "2022-05",
+      "gpa": "3.6",
+      "highlights": []
+    }
+  ],
+  "certifications": [],
+  "achievements": [],
+  "customSections": [],
+  "theme": {
+    "preset": "classic",
+    "fontScale": 1.0,
+    "spacingDensity": 1.0
+  },
+  "sections": [
+    { "id": "summary",    "type": "summary",    "title": "Summary",         "visible": true,  "order": 0, "alignment": "left" },
+    { "id": "experience", "type": "experience", "title": "Work Experience", "visible": true,  "order": 1, "alignment": "left" },
+    { "id": "education",  "type": "education",  "title": "Education",       "visible": true,  "order": 2, "alignment": "left" },
+    { "id": "skills",     "type": "skills",     "title": "Skills",          "visible": true,  "order": 3, "alignment": "left" }
+  ]
+}

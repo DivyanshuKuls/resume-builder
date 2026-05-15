@@ -1,0 +1,215 @@
+{
+  "id": "fixture-large",
+  "title": "Large Resume",
+  "createdAt": "2024-01-01T00:00:00.000Z",
+  "updatedAt": "2024-01-01T00:00:00.000Z",
+  "personalInfo": {
+    "fullName": "Dr. Alexander Chen",
+    "jobTitle": "Principal Software Architect",
+    "photo": "",
+    "photoAlignment": "left"
+  },
+  "contact": {
+    "email": "alex.chen@techcorp.com",
+    "phone": "+1 415 555 9876",
+    "address": "San Francisco, CA",
+    "website": "alexchen.dev",
+    "github": "github.com/alexchen",
+    "linkedin": "linkedin.com/in/alexchen"
+  },
+  "summary": "Principal Software Architect with 15+ years of experience designing and scaling distributed systems. Expert in cloud infrastructure, microservices, and engineering leadership. Led teams across multiple continents to ship mission-critical products at Fortune 500 scale.",
+  "skills": [
+    { "id": "s1", "name": "Distributed Systems" },
+    { "id": "s2", "name": "Go" },
+    { "id": "s3", "name": "Rust" },
+    { "id": "s4", "name": "Kubernetes" },
+    { "id": "s5", "name": "Apache Kafka" },
+    { "id": "s6", "name": "PostgreSQL" },
+    { "id": "s7", "name": "Cassandra" },
+    { "id": "s8", "name": "gRPC" },
+    { "id": "s9", "name": "Terraform" },
+    { "id": "s10", "name": "AWS" }
+  ],
+  "skillGroups": [
+    {
+      "id": "sg1",
+      "category": "Languages",
+      "skills": [
+        { "id": "sg1s1", "name": "Go" },
+        { "id": "sg1s2", "name": "Rust" },
+        { "id": "sg1s3", "name": "Python" },
+        { "id": "sg1s4", "name": "TypeScript" }
+      ]
+    },
+    {
+      "id": "sg2",
+      "category": "Infrastructure",
+      "skills": [
+        { "id": "sg2s1", "name": "Kubernetes" },
+        { "id": "sg2s2", "name": "Terraform" },
+        { "id": "sg2s3", "name": "AWS" },
+        { "id": "sg2s4", "name": "GCP" }
+      ]
+    },
+    {
+      "id": "sg3",
+      "category": "Databases",
+      "skills": [
+        { "id": "sg3s1", "name": "PostgreSQL" },
+        { "id": "sg3s2", "name": "Cassandra" },
+        { "id": "sg3s3", "name": "Redis" },
+        { "id": "sg3s4", "name": "ClickHouse" }
+      ]
+    }
+  ],
+  "skillsConfig": { "mode": "grouped", "headingStyle": "inline" },
+  "experience": [
+    {
+      "id": "exp1",
+      "company": "MegaTech Corp",
+      "position": "Principal Software Architect",
+      "startDate": "2019-03",
+      "endDate": "",
+      "current": true,
+      "location": "San Francisco, CA",
+      "description": "",
+      "highlights": [
+        "Architected global event streaming platform processing 10B+ events/day on Apache Kafka",
+        "Reduced infrastructure costs by $4M annually through multi-cloud optimization",
+        "Led org-wide migration from monolith to 200+ microservices over 3 years",
+        "Mentored 30+ engineers; established architecture review board and RFC process"
+      ]
+    },
+    {
+      "id": "exp2",
+      "company": "ScaleUp Inc",
+      "position": "Senior Staff Engineer",
+      "startDate": "2015-07",
+      "endDate": "2019-02",
+      "current": false,
+      "location": "New York, NY",
+      "description": "",
+      "highlights": [
+        "Designed distributed transaction system handling $500M/day in payments",
+        "Built self-healing infrastructure reducing on-call pages by 80%",
+        "Scaled engineering team from 12 to 60 engineers in 18 months"
+      ]
+    },
+    {
+      "id": "exp3",
+      "company": "DataStream Labs",
+      "position": "Software Engineer",
+      "startDate": "2012-01",
+      "endDate": "2015-06",
+      "current": false,
+      "location": "Boston, MA",
+      "description": "",
+      "highlights": [
+        "Implemented real-time analytics pipeline ingesting 500K events/second",
+        "Contributed to open-source distributed tracing library (2K+ GitHub stars)"
+      ]
+    },
+    {
+      "id": "exp4",
+      "company": "StartupHub",
+      "position": "Junior Developer",
+      "startDate": "2010-06",
+      "endDate": "2011-12",
+      "current": false,
+      "location": "Boston, MA",
+      "description": "",
+      "highlights": [
+        "Shipped first production feature in week 2 of joining the company"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj1",
+      "name": "DistributedKV",
+      "description": "A linearizable distributed key-value store built on Raft consensus, written in Go.",
+      "url": "github.com/alexchen/distributedkv",
+      "technologies": ["Go", "Raft", "gRPC"],
+      "highlights": ["3K+ GitHub stars", "Used in production by 5 companies"]
+    },
+    {
+      "id": "proj2",
+      "name": "FluxMetrics",
+      "description": "High-cardinality time-series metrics platform with sub-millisecond query latency.",
+      "url": "github.com/alexchen/fluxmetrics",
+      "technologies": ["Rust", "ClickHouse", "Kafka"],
+      "highlights": ["Ingests 1M metrics/sec on commodity hardware"]
+    }
+  ],
+  "education": [
+    {
+      "id": "edu1",
+      "institution": "MIT",
+      "degree": "Ph.D.",
+      "field": "Computer Science – Distributed Systems",
+      "startDate": "2007-09",
+      "endDate": "2011-06",
+      "gpa": "",
+      "highlights": ["Dissertation: Consistency Models in Geo-Distributed Databases"]
+    },
+    {
+      "id": "edu2",
+      "institution": "Stanford University",
+      "degree": "B.S.",
+      "field": "Computer Science",
+      "startDate": "2003-09",
+      "endDate": "2007-06",
+      "gpa": "3.95",
+      "highlights": []
+    }
+  ],
+  "certifications": [
+    {
+      "id": "cert1",
+      "name": "AWS Solutions Architect – Professional",
+      "issuer": "Amazon Web Services",
+      "date": "2022-04",
+      "expiryDate": "2025-04",
+      "url": "",
+      "description": ""
+    },
+    {
+      "id": "cert2",
+      "name": "Certified Kubernetes Administrator",
+      "issuer": "CNCF",
+      "date": "2021-11",
+      "expiryDate": "2024-11",
+      "url": "",
+      "description": ""
+    }
+  ],
+  "achievements": [
+    {
+      "id": "ach1",
+      "title": "OSCON Best Talk Award",
+      "description": "Recognized for talk on consistency models at O'Reilly OSCON 2021.",
+      "date": "2021-07"
+    },
+    {
+      "id": "ach2",
+      "title": "Engineering Excellence Award",
+      "description": "Internal recognition for Kafka migration project at MegaTech Corp.",
+      "date": "2022-12"
+    }
+  ],
+  "customSections": [],
+  "theme": {
+    "preset": "professional",
+    "fontScale": 0.95,
+    "spacingDensity": 0.9
+  },
+  "sections": [
+    { "id": "summary",        "type": "summary",        "title": "Summary",          "visible": true,  "order": 0, "alignment": "left" },
+    { "id": "experience",     "type": "experience",     "title": "Experience",        "visible": true,  "order": 1, "alignment": "left" },
+    { "id": "education",      "type": "education",      "title": "Education",         "visible": true,  "order": 2, "alignment": "left" },
+    { "id": "skills",         "type": "skills",         "title": "Skills",            "visible": true,  "order": 3, "alignment": "left" },
+    { "id": "projects",       "type": "projects",       "title": "Projects",          "visible": true,  "order": 4, "alignment": "left" },
+    { "id": "certifications", "type": "certifications", "title": "Certifications",    "visible": true,  "order": 5, "alignment": "left" },
+    { "id": "achievements",   "type": "achievements",   "title": "Achievements",      "visible": true,  "order": 6, "alignment": "left" }
+  ]
+}

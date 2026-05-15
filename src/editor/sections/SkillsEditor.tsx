@@ -155,8 +155,8 @@ function GroupRow({
 // ── Main editor ───────────────────────────────────────────────────────────────
 
 export function SkillsEditor({ section }: SectionEditorProps) {
-  const { resume, updateSkillsConfig, addSkillGroup, updateSkillGroup, removeSkillGroup } =
-    useResumeStore()
+  const resume = useResume()
+  const { updateSkillsConfig, addSkillGroup, updateSkillGroup, removeSkillGroup } = useResumeActions()
   const { mode, headingStyle } = resume.skillsConfig
 
   function addGroup() {

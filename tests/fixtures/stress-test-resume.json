@@ -1,0 +1,142 @@
+{
+  "id": "fixture-stress",
+  "title": "Stress Test Resume",
+  "createdAt": "2024-01-01T00:00:00.000Z",
+  "updatedAt": "2024-01-01T00:00:00.000Z",
+  "personalInfo": {
+    "fullName": "Aaaaaaa Bbbbbbbbbbbbbbbbbbbb-Ccccccccccccccccccc",
+    "jobTitle": "Senior Principal Staff Distinguished Fellow Architect Engineer Manager Director",
+    "photo": "",
+    "photoAlignment": "none"
+  },
+  "contact": {
+    "email": "very.long.email.address+tag@subdomain.example-domain.co.uk",
+    "phone": "+44 20 7946 0958 ext. 1234",
+    "address": "123 Very Long Street Name, Apartment 456, Some Suburb, London, United Kingdom, SW1A 1AA",
+    "website": "https://www.this-is-a-very-long-domain-name-for-testing.com/path/to/page",
+    "github": "github.com/user-with-a-very-long-github-username",
+    "linkedin": "linkedin.com/in/user-with-a-very-long-linkedin-username"
+  },
+  "summary": "This is a very long summary paragraph designed to stress-test the layout engine. It contains multiple sentences to ensure that text wrapping, line height, and spacing all behave correctly under high content density. The summary should reflow gracefully across all viewport sizes and print media. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+  "skills": [
+    { "id": "s1",  "name": "JavaScript" },
+    { "id": "s2",  "name": "TypeScript" },
+    { "id": "s3",  "name": "React" },
+    { "id": "s4",  "name": "Vue.js" },
+    { "id": "s5",  "name": "Angular" },
+    { "id": "s6",  "name": "Node.js" },
+    { "id": "s7",  "name": "Python" },
+    { "id": "s8",  "name": "Go" },
+    { "id": "s9",  "name": "Rust" },
+    { "id": "s10", "name": "Java" },
+    { "id": "s11", "name": "C++" },
+    { "id": "s12", "name": "PostgreSQL" },
+    { "id": "s13", "name": "MySQL" },
+    { "id": "s14", "name": "MongoDB" },
+    { "id": "s15", "name": "Redis" },
+    { "id": "s16", "name": "Kafka" },
+    { "id": "s17", "name": "Docker" },
+    { "id": "s18", "name": "Kubernetes" },
+    { "id": "s19", "name": "AWS" },
+    { "id": "s20", "name": "GCP" }
+  ],
+  "skillGroups": [],
+  "skillsConfig": { "mode": "individual", "headingStyle": "inline" },
+  "experience": [
+    {
+      "id": "exp1",
+      "company": "A Company With An Exceptionally Long Name That Tests Layout",
+      "position": "Senior Principal Staff Engineer – Platform & Infrastructure",
+      "startDate": "2020-01",
+      "endDate": "",
+      "current": true,
+      "location": "San Francisco, CA (Remote)",
+      "description": "This is a long description field that tests the description rendering path for experience entries.",
+      "highlights": [
+        "This is a highlight that is intentionally very long to test text wrapping in the bullet list renderer component across multiple lines of text.",
+        "Another highlight with special characters: < > & \" ' / to verify HTML escaping is handled correctly.",
+        "Short highlight.",
+        "Highlight with numbers: increased revenue by 1,234,567% and reduced latency from 9,999ms to 0.001ms.",
+        "Highlight referencing URLs: see https://example.com/very/long/path for details."
+      ]
+    },
+    {
+      "id": "exp2",
+      "company": "Previous Company",
+      "position": "Engineer",
+      "startDate": "2015-01",
+      "endDate": "2019-12",
+      "current": false,
+      "location": "",
+      "description": "",
+      "highlights": ["Did stuff."]
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj1",
+      "name": "A Project With An Unreasonably Long Title That Wraps Onto Multiple Lines",
+      "description": "A project description that is intentionally verbose to test layout behavior when description text is much longer than normal and needs to wrap across many lines of rendered output.",
+      "url": "https://github.com/user/project-with-a-very-long-repository-name-for-testing",
+      "technologies": ["React", "TypeScript", "Node.js", "PostgreSQL", "Docker", "Kubernetes", "AWS", "GitHub Actions", "Terraform"],
+      "highlights": [
+        "Achieved 99.999% uptime over 18 months of continuous operation.",
+        "Won an award."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "id": "edu1",
+      "institution": "University of California, Los Angeles (UCLA) – Henry Samueli School of Engineering and Applied Science",
+      "degree": "Master of Science",
+      "field": "Computer Science and Engineering",
+      "startDate": "2013-09",
+      "endDate": "2015-06",
+      "gpa": "4.0",
+      "highlights": [
+        "Graduate Teaching Assistant for CS 111: Operating Systems Principles"
+      ]
+    }
+  ],
+  "certifications": [
+    {
+      "id": "cert1",
+      "name": "AWS Certified Solutions Architect – Professional Level Certification",
+      "issuer": "Amazon Web Services (AWS)",
+      "date": "2023-01",
+      "expiryDate": "2026-01",
+      "url": "https://example.com/cert",
+      "description": "An optional certification description for testing layout."
+    }
+  ],
+  "achievements": [
+    {
+      "id": "ach1",
+      "title": "Longest Achievement Title That Has Ever Been Entered Into This Resume Builder",
+      "description": "This achievement description is also very long to test that the achievements renderer handles multiline text correctly without overflowing its container.",
+      "date": "2023-06"
+    }
+  ],
+  "customSections": [
+    {
+      "id": "cs-stress",
+      "content": "Line 1: normal content\nLine 2: content with <special> & \"characters\"\nLine 3: a very long line that should cause text to wrap in the custom section renderer if it exceeds the container width which it should\nLine 4: short\nLine 5: 日本語テスト — Unicode content\nLine 6: Emoji test 🚀 🎉 ✅"
+    }
+  ],
+  "theme": {
+    "preset": "minimal",
+    "fontScale": 0.85,
+    "spacingDensity": 0.8
+  },
+  "sections": [
+    { "id": "summary",        "type": "summary",        "title": "Summary",          "visible": true,  "order": 0, "alignment": "left" },
+    { "id": "experience",     "type": "experience",     "title": "Work Experience",  "visible": true,  "order": 1, "alignment": "left" },
+    { "id": "education",      "type": "education",      "title": "Education",        "visible": true,  "order": 2, "alignment": "left" },
+    { "id": "skills",         "type": "skills",         "title": "Skills",           "visible": true,  "order": 3, "alignment": "left" },
+    { "id": "projects",       "type": "projects",       "title": "Projects",         "visible": true,  "order": 4, "alignment": "left" },
+    { "id": "certifications", "type": "certifications", "title": "Certifications",   "visible": true,  "order": 5, "alignment": "left" },
+    { "id": "achievements",   "type": "achievements",   "title": "Achievements",     "visible": true,  "order": 6, "alignment": "left" },
+    { "id": "cs-stress",      "type": "custom",         "title": "Custom Section",   "visible": true,  "order": 7, "alignment": "left" }
+  ]
+}

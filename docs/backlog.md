@@ -23,17 +23,17 @@ These foundational items are done and inform current backlog priorities.
 - Skills dual-mode: individual flat list vs. grouped categories
 - Toast notifications
 - localStorage persistence with `updatedAt` timestamp tracking
+- **Testing infrastructure**: Vitest + React Testing Library + Playwright configured
+- **Unit test suites**: `sectionContent.ts`, `computeThemeCSSVars`, `resumeStore` (all actions), `importExport.ts`, `validate.ts`
+- **Component tests**: `SectionRenderer`, `SkillRenderer`, `PreviewHeader`
+- **E2E tests**: editor editing flow, drag-and-drop UI presence (`tests/e2e/`)
+- **Test fixtures + builders**: 4 JSON fixtures + `resumeBuilders.ts` factory functions
+- **Testing strategy documentation**: `docs/testing-strategy.md`
+- **Basic import validation**: `parseResumeJSON` validates structure, guards array fields, merges defaults
 
 ---
 
 ## P0 — Critical Stability & Maintainability
-
-### Testing Infrastructure
-- [ ] Set up Vitest + React Testing Library
-- [ ] Unit tests for `sectionContent.ts` (all section types, empty/partial states)
-- [ ] Unit tests for `computeThemeCSSVars` (preset loading, override merging, scale computation)
-- [ ] Unit tests for `resumeStore` actions (add/update/remove, order renumbering, migration)
-- [ ] Unit tests for `importExport.ts` (round-trip, malformed input handling)
 
 ### Error Boundaries
 - [ ] Add React error boundary around `SectionRenderer` to isolate renderer crashes
@@ -41,9 +41,10 @@ These foundational items are done and inform current backlog priorities.
 - [ ] Log boundary errors for debugging (console + optional future error reporting)
 
 ### Runtime Schema Validation
-- [ ] Add Zod schema for `Resume` root type
-- [ ] Validate on JSON import (currently unguarded — malformed imports can corrupt store)
+- [ ] Add Zod schema for deep field-level validation of imported resume data (array items, nested objects)
 - [ ] Validate on store hydration (catch stale localStorage shapes that migration didn't cover)
+
+> Basic structural validation is in place: `parseResumeJSON` checks `personalInfo` presence, guards all array fields, and merges defaults. Deep item-level type guards and hydration validation remain.
 
 ---
 

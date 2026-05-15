@@ -45,6 +45,30 @@ npm run preview   # Preview production build locally
 
 ---
 
+## Testing
+
+```bash
+npm test                # Run unit + component tests (one-shot)
+npm run test:watch      # Run in watch mode
+npm run test:coverage   # Generate coverage report
+npm run test:e2e        # Run Playwright E2E tests
+npm run test:e2e:ui     # Playwright interactive UI mode
+```
+
+The test suite uses **Vitest** for unit and component tests, **React Testing Library** for component rendering, and **Playwright** for end-to-end browser tests.
+
+### First-time Playwright setup
+
+```bash
+npx playwright install --with-deps chromium
+```
+
+E2E tests start the dev server automatically via `playwright.config.ts`.
+
+See [`docs/testing-strategy.md`](docs/testing-strategy.md) for the full testing philosophy, folder layout, and contribution guide.
+
+---
+
 ## Development Workflow
 
 ### Releasing a version

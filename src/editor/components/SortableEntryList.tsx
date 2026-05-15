@@ -8,7 +8,6 @@ import {
   useSensors,
   type DragEndEvent,
   type DraggableAttributes,
-  type SyntheticListenerMap,
 } from '@dnd-kit/core'
 import {
   SortableContext,
@@ -22,6 +21,8 @@ import { CSS } from '@dnd-kit/utilities'
 import { cn } from '@/utils/cn'
 
 // ── Shared handle-props type ─────────────────────────────────────────────────
+
+type SyntheticListenerMap = NonNullable<ReturnType<typeof useSortable>['listeners']>
 
 /** Props that must be spread onto the drag-handle element. */
 export interface DragHandleProps {

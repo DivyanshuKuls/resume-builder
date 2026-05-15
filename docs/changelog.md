@@ -10,6 +10,25 @@ Pending work tracked in [backlog.md](backlog.md).
 
 ---
 
+## [0.6.0] — 2026-05-15
+
+_Testing infrastructure and import validation_
+
+### Added
+- **Vitest** unit test suite with jsdom environment; `@` path alias wired to `src/`
+- **Playwright** E2E test suite; `webServer` config auto-starts the dev server
+- Unit tests for all five core modules: `sectionContent.ts`, `tokens.ts` (`computeThemeCSSVars`), `resumeStore.ts` (every action), `importExport.ts`, `validate.ts`
+- Component tests for `SectionRenderer`, `SkillRenderer`, `PreviewHeader` via React Testing Library
+- E2E specs: editor editing flow (`editor.spec.ts`) and drag-and-drop UI presence (`dragdrop.spec.ts`)
+- Four JSON test fixtures (`simple`, `large`, `creative`, `stress-test`) for integration-level testing
+- `tests/utils/resumeBuilders.ts` — factory functions for minimal-valid test data
+- `docs/testing-strategy.md` — testing philosophy, folder map, how-to guides, CI integration notes
+
+### Improved
+- `parseResumeJSON` now validates input structure before committing to the store: requires `personalInfo` object, type-guards all top-level array fields, and deep-merges defaults for any missing fields — prevents silent store corruption from malformed imports
+
+---
+
 ## [0.5.0] — 2026-05-15
 
 _Commit: `cca349d` — stabilize section titles and nested sortable entries_  

@@ -1,0 +1,145 @@
+{
+  "id": "fixture-creative",
+  "title": "Creative Resume",
+  "createdAt": "2024-06-01T00:00:00.000Z",
+  "updatedAt": "2024-06-01T00:00:00.000Z",
+  "personalInfo": {
+    "fullName": "Sofia Reyes",
+    "jobTitle": "UX Designer & Creative Director",
+    "photo": "",
+    "photoAlignment": "right"
+  },
+  "contact": {
+    "email": "sofia@sofiacreates.com",
+    "phone": "+1 323 555 4444",
+    "address": "Los Angeles, CA",
+    "website": "sofiacreates.com",
+    "github": "",
+    "linkedin": "linkedin.com/in/sofiareyes"
+  },
+  "summary": "Award-winning UX Designer with 8 years of experience crafting human-centered digital experiences. Passionate about bridging the gap between business goals and user needs through research-driven design.",
+  "skills": [],
+  "skillGroups": [
+    {
+      "id": "sg1",
+      "category": "Design",
+      "skills": [
+        { "id": "sg1s1", "name": "Figma" },
+        { "id": "sg1s2", "name": "Sketch" },
+        { "id": "sg1s3", "name": "Adobe XD" },
+        { "id": "sg1s4", "name": "Illustrator" }
+      ]
+    },
+    {
+      "id": "sg2",
+      "category": "Research",
+      "skills": [
+        { "id": "sg2s1", "name": "User Interviews" },
+        { "id": "sg2s2", "name": "Usability Testing" },
+        { "id": "sg2s3", "name": "A/B Testing" }
+      ]
+    },
+    {
+      "id": "sg3",
+      "category": "Code",
+      "skills": [
+        { "id": "sg3s1", "name": "HTML/CSS" },
+        { "id": "sg3s2", "name": "React (basics)" }
+      ]
+    }
+  ],
+  "skillsConfig": { "mode": "grouped", "headingStyle": "block" },
+  "experience": [
+    {
+      "id": "exp1",
+      "company": "PixelForge Studio",
+      "position": "Creative Director",
+      "startDate": "2020-01",
+      "endDate": "",
+      "current": true,
+      "location": "Los Angeles, CA",
+      "description": "",
+      "highlights": [
+        "Led design system overhaul for a $200M e-commerce platform, increasing conversion by 22%",
+        "Managed a team of 8 designers across product, brand, and motion tracks",
+        "Established design ops processes that halved design-to-handoff cycle time"
+      ]
+    },
+    {
+      "id": "exp2",
+      "company": "TechNova",
+      "position": "Senior UX Designer",
+      "startDate": "2017-05",
+      "endDate": "2019-12",
+      "current": false,
+      "location": "San Francisco, CA",
+      "description": "",
+      "highlights": [
+        "Redesigned onboarding flow reducing drop-off rate from 62% to 28%",
+        "Shipped 40+ user research studies influencing product roadmap"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj1",
+      "name": "Open Type Foundry",
+      "description": "A free variable font design tool built for the browser.",
+      "url": "opentypefoundry.com",
+      "technologies": ["Figma API", "React", "SVG"],
+      "highlights": ["Featured on Product Hunt (Top 5 of the Day)"]
+    }
+  ],
+  "education": [
+    {
+      "id": "edu1",
+      "institution": "Rhode Island School of Design",
+      "degree": "B.F.A.",
+      "field": "Graphic Design",
+      "startDate": "2011-09",
+      "endDate": "2015-05",
+      "gpa": "",
+      "highlights": []
+    }
+  ],
+  "certifications": [
+    {
+      "id": "cert1",
+      "name": "Nielsen Norman Group UX Certification",
+      "issuer": "Nielsen Norman Group",
+      "date": "2020-09",
+      "expiryDate": "",
+      "url": "",
+      "description": ""
+    }
+  ],
+  "achievements": [
+    {
+      "id": "ach1",
+      "title": "Awwwards Site of the Day",
+      "description": "Recognized for client work on artisan furniture brand rebrand.",
+      "date": "2022-03"
+    }
+  ],
+  "customSections": [
+    { "id": "cs-speaking", "content": "SXSW 2023 – \"Designing for Delight at Scale\"\nConfig.2022 – \"Research-Driven Motion Design\"" }
+  ],
+  "theme": {
+    "preset": "modern",
+    "primaryColor": "#7c3aed",
+    "accentColor": "#7c3aed",
+    "fontFamily": "inter",
+    "fontScale": 1.0,
+    "spacingDensity": 1.05
+  },
+  "sections": [
+    { "id": "summary",        "type": "summary",        "title": "About",             "visible": true,  "order": 0, "alignment": "left" },
+    { "id": "experience",     "type": "experience",     "title": "Experience",        "visible": true,  "order": 1, "alignment": "left" },
+    { "id": "skills",         "type": "skills",         "title": "Expertise",         "visible": true,  "order": 2, "alignment": "left" },
+    { "id": "projects",       "type": "projects",       "title": "Selected Work",     "visible": true,  "order": 3, "alignment": "left" },
+    { "id": "achievements",   "type": "achievements",   "title": "Recognition",       "visible": true,  "order": 4, "alignment": "left" },
+    { "id": "cs-speaking",    "type": "custom",         "title": "Speaking",          "visible": true,  "order": 5, "alignment": "left" },
+    { "id": "certifications", "type": "certifications", "title": "Certifications",    "visible": true,  "order": 6, "alignment": "left" },
+    { "id": "education",      "type": "education",      "title": "Education",         "visible": true,  "order": 7, "alignment": "left" }
+  ]
+}

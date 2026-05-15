@@ -25,10 +25,10 @@ Known architectural gaps, scalability concerns, and deferred decisions. Each ite
 
 ## Schema & Validation
 
-### No Runtime Import Validation
-**Severity:** High  
-**Impact:** `importExport.ts` reads a JSON file and passes it directly to `loadResume()` without validation. A malformed or version-mismatched file can silently corrupt the store.  
-**Recommended solution:** Zod schema matching `src/types/resume.ts`. Parse on import; surface field-level errors before committing. Also validate on `persist` hydration.
+### Incomplete Runtime Import Validation
+**Severity:** Medium _(was High — basic structural validation now in place)_  
+**Impact:** `parseResumeJSON` validates the `personalInfo` requirement and type-guards all top-level array fields, preventing the most common corruption paths. However, array _items_ are not validated (e.g., a malformed `Experience` object will pass through), and `persist` hydration is still unvalidated.  
+**Recommended solution:** Add a Zod schema for the `Resume` type and apply it inside `parseResumeJSON` for full field-level safety. Also validate on `persist` hydration to catch stale localStorage shapes that migration didn't cover.
 
 ### Zustand Migration Coverage
 **Severity:** Medium  
