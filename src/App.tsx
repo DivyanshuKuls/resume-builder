@@ -4,6 +4,7 @@ import { AppLayout } from '@/components/layout/AppLayout'
 import { AppHeader } from '@/components/layout/AppHeader'
 import { EditorPanel } from '@/editor/EditorPanel'
 import { PreviewPanel } from '@/preview/PreviewPanel'
+import { Toaster } from '@/components/ui/Toaster'
 import { useResumeStore } from '@/store/resumeStore'
 
 export default function App() {
@@ -18,10 +19,13 @@ export default function App() {
   })
 
   return (
-    <AppLayout
-      header={<AppHeader onPrint={() => handlePrint()} />}
-      editor={<EditorPanel />}
-      preview={<PreviewPanel ref={printRef} />}
-    />
+    <>
+      <AppLayout
+        header={<AppHeader onPrint={() => handlePrint()} />}
+        editor={<EditorPanel />}
+        preview={<PreviewPanel ref={printRef} />}
+      />
+      <Toaster />
+    </>
   )
 }

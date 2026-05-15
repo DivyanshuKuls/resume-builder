@@ -1,11 +1,14 @@
-import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useResumeStore } from '@/store/resumeStore'
+import { useUIStore } from '@/store/uiStore'
 import { EntryCard } from '@/editor/components/EntryCard'
 import { SectionHeader } from '@/editor/components/SectionHeader'
+import { EmptyState } from '@/editor/components/EmptyState'
 import { formatDate } from '@/utils/formatDate'
 import type { Certification } from '@/types/resume'
+
+const SECTION_KEY = 'certifications'
 
 function CertEntryForm({ cert }: { cert: Certification }) {
   const { updateCertification } = useResumeStore()
@@ -63,9 +66,9 @@ function CertEntryForm({ cert }: { cert: Certification }) {
 }
 
 export function CertificationsEditor() {
-  const { resume, addCertification, removeCertification, reorderCertifications } =
-    useResumeStore()
-  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const { resume, addCertification, removeCertification, reorderCertifications } = useResumeStore()
+  const { expandedEntry, setExpandedEntry, toggleExpandedEntry } = useUIStore()
+  const expandedId = expandedEntry[SECTION_KEY] ?? null
 
   function handleAdd() {
     const newCert: Certification = {
@@ -78,7 +81,7 @@ export function CertificationsEditor() {
       description: '',
     }
     addCertification(newCert)
-    setExpandedId(newCert.id)
+    setExpandedEntry(SECTION_KEY, newCert.id)
   }
 
   function move(index: number, direction: 'up' | 'down') {
@@ -98,9 +101,7 @@ export function CertificationsEditor() {
       />
 
       {resume.certifications.length === 0 && (
-        <p className="py-8 text-center text-xs text-slate-400">
-          No certifications yet. Click &quot;Add Certification&quot; to get started.
-        </p>
+        <EmptyState message="No certifications yet." action="Add Certification" />
       )}
 
       <div className="space-y-2">
@@ -113,10 +114,10 @@ export function CertificationsEditor() {
             isExpanded={expandedId === cert.id}
             isFirst={i === 0}
             isLast={i === resume.certifications.length - 1}
-            onToggle={() => setExpandedId(expandedId === cert.id ? null : cert.id)}
+            onToggle={() => toggleExpandedEntry(SECTION_KEY, cert.id)}
             onDelete={() => {
               removeCertification(cert.id)
-              if (expandedId === cert.id) setExpandedId(null)
+              if (expandedId === cert.id) setExpandedEntry(SECTION_KEY, null)
             }}
             onMoveUp={() => move(i, 'up')}
             onMoveDown={() => move(i, 'down')}

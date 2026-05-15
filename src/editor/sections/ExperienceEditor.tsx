@@ -1,12 +1,15 @@
-import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useResumeStore } from '@/store/resumeStore'
+import { useUIStore } from '@/store/uiStore'
 import { EntryCard } from '@/editor/components/EntryCard'
 import { BulletListEditor } from '@/editor/components/BulletListEditor'
 import { SectionHeader } from '@/editor/components/SectionHeader'
+import { EmptyState } from '@/editor/components/EmptyState'
 import { formatDateRange } from '@/utils/formatDate'
 import type { Experience } from '@/types/resume'
+
+const SECTION_KEY = 'experience'
 
 function ExperienceEntryForm({ exp }: { exp: Experience }) {
   const { updateExperience } = useResumeStore()
@@ -84,7 +87,8 @@ function ExperienceEntryForm({ exp }: { exp: Experience }) {
 
 export function ExperienceEditor() {
   const { resume, addExperience, removeExperience, reorderExperience } = useResumeStore()
-  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const { expandedEntry, setExpandedEntry, toggleExpandedEntry } = useUIStore()
+  const expandedId = expandedEntry[SECTION_KEY] ?? null
 
   function handleAdd() {
     const newExp: Experience = {
@@ -99,7 +103,7 @@ export function ExperienceEditor() {
       highlights: [],
     }
     addExperience(newExp)
-    setExpandedId(newExp.id)
+    setExpandedEntry(SECTION_KEY, newExp.id)
   }
 
   function move(index: number, direction: 'up' | 'down') {
@@ -119,9 +123,7 @@ export function ExperienceEditor() {
       />
 
       {resume.experience.length === 0 && (
-        <p className="py-8 text-center text-xs text-slate-400">
-          No experience entries yet. Click &quot;Add Job&quot; to get started.
-        </p>
+        <EmptyState message="No experience entries yet." action="Add Job" />
       )}
 
       <div className="space-y-2">
@@ -134,10 +136,10 @@ export function ExperienceEditor() {
             isExpanded={expandedId === exp.id}
             isFirst={i === 0}
             isLast={i === resume.experience.length - 1}
-            onToggle={() => setExpandedId(expandedId === exp.id ? null : exp.id)}
+            onToggle={() => toggleExpandedEntry(SECTION_KEY, exp.id)}
             onDelete={() => {
               removeExperience(exp.id)
-              if (expandedId === exp.id) setExpandedId(null)
+              if (expandedId === exp.id) setExpandedEntry(SECTION_KEY, null)
             }}
             onMoveUp={() => move(i, 'up')}
             onMoveDown={() => move(i, 'down')}

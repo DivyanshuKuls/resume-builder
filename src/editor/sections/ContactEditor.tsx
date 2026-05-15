@@ -3,12 +3,17 @@ import { useForm } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useResumeStore } from '@/store/resumeStore'
+import { isValidEmail, isValidUrl } from '@/utils/validate'
 import type { ContactDetails } from '@/types/resume'
+
+function FieldHint({ message }: { message: string }) {
+  return <p className="mt-1 text-[11px] text-red-500">{message}</p>
+}
 
 export function ContactEditor() {
   const { resume, updateContact } = useResumeStore()
 
-  const { register, watch, reset } = useForm<ContactDetails>({
+  const { register, watch, reset, formState: { touchedFields } } = useForm<ContactDetails>({
     defaultValues: resume.contact,
   })
 
@@ -22,14 +27,15 @@ export function ContactEditor() {
     const timer = setTimeout(() => updateContact(values), 200)
     return () => clearTimeout(timer)
   }, [
-    values.email,
-    values.phone,
-    values.address,
-    values.website,
-    values.github,
-    values.linkedin,
+    values.email, values.phone, values.address,
+    values.website, values.github, values.linkedin,
     updateContact,
   ])
+
+  const showEmailError   = touchedFields.email   && !!values.email   && !isValidEmail(values.email)
+  const showWebsiteError = touchedFields.website  && !!values.website && !isValidUrl(values.website)
+  const showGithubError  = touchedFields.github   && !!values.github  && !isValidUrl(values.github)
+  const showLinkedInError = touchedFields.linkedin && !!values.linkedin && !isValidUrl(values.linkedin)
 
   return (
     <div className="space-y-5">
@@ -49,6 +55,7 @@ export function ContactEditor() {
             placeholder="alex@example.com"
             {...register('email')}
           />
+          {showEmailError && <FieldHint message="Enter a valid email address." />}
         </div>
 
         <div>
@@ -63,11 +70,8 @@ export function ContactEditor() {
 
         <div>
           <Label htmlFor="website">Website / Portfolio</Label>
-          <Input
-            id="website"
-            placeholder="yoursite.com"
-            {...register('website')}
-          />
+          <Input id="website" placeholder="yoursite.com" {...register('website')} />
+          {showWebsiteError && <FieldHint message="Enter a valid URL (e.g. yoursite.com)." />}
         </div>
       </div>
 
@@ -78,20 +82,14 @@ export function ContactEditor() {
         <div className="space-y-3">
           <div>
             <Label htmlFor="github">GitHub</Label>
-            <Input
-              id="github"
-              placeholder="github.com/username"
-              {...register('github')}
-            />
+            <Input id="github" placeholder="github.com/username" {...register('github')} />
+            {showGithubError && <FieldHint message="Enter a valid URL." />}
           </div>
 
           <div>
             <Label htmlFor="linkedin">LinkedIn</Label>
-            <Input
-              id="linkedin"
-              placeholder="linkedin.com/in/username"
-              {...register('linkedin')}
-            />
+            <Input id="linkedin" placeholder="linkedin.com/in/username" {...register('linkedin')} />
+            {showLinkedInError && <FieldHint message="Enter a valid URL." />}
           </div>
         </div>
       </div>

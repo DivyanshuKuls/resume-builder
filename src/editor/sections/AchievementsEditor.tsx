@@ -1,12 +1,15 @@
-import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { useResumeStore } from '@/store/resumeStore'
+import { useUIStore } from '@/store/uiStore'
 import { EntryCard } from '@/editor/components/EntryCard'
 import { SectionHeader } from '@/editor/components/SectionHeader'
+import { EmptyState } from '@/editor/components/EmptyState'
 import { formatDate } from '@/utils/formatDate'
 import type { Achievement } from '@/types/resume'
+
+const SECTION_KEY = 'achievements'
 
 function AchievementEntryForm({ ach }: { ach: Achievement }) {
   const { updateAchievement } = useResumeStore()
@@ -47,7 +50,8 @@ function AchievementEntryForm({ ach }: { ach: Achievement }) {
 
 export function AchievementsEditor() {
   const { resume, addAchievement, removeAchievement, reorderAchievements } = useResumeStore()
-  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const { expandedEntry, setExpandedEntry, toggleExpandedEntry } = useUIStore()
+  const expandedId = expandedEntry[SECTION_KEY] ?? null
 
   function handleAdd() {
     const newAch: Achievement = {
@@ -57,7 +61,7 @@ export function AchievementsEditor() {
       date: '',
     }
     addAchievement(newAch)
-    setExpandedId(newAch.id)
+    setExpandedEntry(SECTION_KEY, newAch.id)
   }
 
   function move(index: number, direction: 'up' | 'down') {
@@ -77,9 +81,7 @@ export function AchievementsEditor() {
       />
 
       {resume.achievements.length === 0 && (
-        <p className="py-8 text-center text-xs text-slate-400">
-          No achievements yet. Click &quot;Add Achievement&quot; to get started.
-        </p>
+        <EmptyState message="No achievements yet." action="Add Achievement" />
       )}
 
       <div className="space-y-2">
@@ -91,10 +93,10 @@ export function AchievementsEditor() {
             isExpanded={expandedId === ach.id}
             isFirst={i === 0}
             isLast={i === resume.achievements.length - 1}
-            onToggle={() => setExpandedId(expandedId === ach.id ? null : ach.id)}
+            onToggle={() => toggleExpandedEntry(SECTION_KEY, ach.id)}
             onDelete={() => {
               removeAchievement(ach.id)
-              if (expandedId === ach.id) setExpandedId(null)
+              if (expandedId === ach.id) setExpandedEntry(SECTION_KEY, null)
             }}
             onMoveUp={() => move(i, 'up')}
             onMoveDown={() => move(i, 'down')}

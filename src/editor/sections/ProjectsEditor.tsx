@@ -5,10 +5,14 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { useResumeStore } from '@/store/resumeStore'
+import { useUIStore } from '@/store/uiStore'
 import { EntryCard } from '@/editor/components/EntryCard'
 import { BulletListEditor } from '@/editor/components/BulletListEditor'
 import { SectionHeader } from '@/editor/components/SectionHeader'
+import { EmptyState } from '@/editor/components/EmptyState'
 import type { Project } from '@/types/resume'
+
+const SECTION_KEY = 'projects'
 
 function ProjectEntryForm({ proj }: { proj: Project }) {
   const { updateProject } = useResumeStore()
@@ -54,18 +58,16 @@ function ProjectEntryForm({ proj }: { proj: Project }) {
 
       <div>
         <Label className="mb-1.5">Technologies</Label>
-        <div className="flex flex-wrap gap-1.5 mb-2">
+        <div className="mb-2 flex flex-wrap gap-1.5">
           {proj.technologies.map((tech, i) => (
             <span
               key={i}
-              className="flex items-center gap-1 rounded-full bg-slate-100 pl-2.5 pr-1 py-0.5 text-[11px] text-slate-700"
+              className="flex items-center gap-1 rounded-full bg-slate-100 py-0.5 pl-2.5 pr-1 text-[11px] text-slate-700"
             >
               {tech}
               <button
                 type="button"
-                onClick={() =>
-                  upd({ technologies: proj.technologies.filter((_, j) => j !== i) })
-                }
+                onClick={() => upd({ technologies: proj.technologies.filter((_, j) => j !== i) })}
                 className="text-slate-400 hover:text-red-500"
               >
                 <X className="h-2.5 w-2.5" />
@@ -79,12 +81,7 @@ function ProjectEntryForm({ proj }: { proj: Project }) {
             placeholder="Add technology…"
             className="h-7 text-xs"
             onChange={(e) => setTechInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault()
-                addTech()
-              }
-            }}
+            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTech() } }}
           />
           <Button type="button" variant="outline" size="sm" onClick={addTech} className="h-7">
             Add
@@ -104,7 +101,8 @@ function ProjectEntryForm({ proj }: { proj: Project }) {
 
 export function ProjectsEditor() {
   const { resume, addProject, removeProject, reorderProjects } = useResumeStore()
-  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const { expandedEntry, setExpandedEntry, toggleExpandedEntry } = useUIStore()
+  const expandedId = expandedEntry[SECTION_KEY] ?? null
 
   function handleAdd() {
     const newProj: Project = {
@@ -116,7 +114,7 @@ export function ProjectsEditor() {
       highlights: [],
     }
     addProject(newProj)
-    setExpandedId(newProj.id)
+    setExpandedEntry(SECTION_KEY, newProj.id)
   }
 
   function move(index: number, direction: 'up' | 'down') {
@@ -136,9 +134,7 @@ export function ProjectsEditor() {
       />
 
       {resume.projects.length === 0 && (
-        <p className="py-8 text-center text-xs text-slate-400">
-          No projects yet. Click &quot;Add Project&quot; to get started.
-        </p>
+        <EmptyState message="No projects yet." action="Add Project" />
       )}
 
       <div className="space-y-2">
@@ -150,10 +146,10 @@ export function ProjectsEditor() {
             isExpanded={expandedId === proj.id}
             isFirst={i === 0}
             isLast={i === resume.projects.length - 1}
-            onToggle={() => setExpandedId(expandedId === proj.id ? null : proj.id)}
+            onToggle={() => toggleExpandedEntry(SECTION_KEY, proj.id)}
             onDelete={() => {
               removeProject(proj.id)
-              if (expandedId === proj.id) setExpandedId(null)
+              if (expandedId === proj.id) setExpandedEntry(SECTION_KEY, null)
             }}
             onMoveUp={() => move(i, 'up')}
             onMoveDown={() => move(i, 'down')}

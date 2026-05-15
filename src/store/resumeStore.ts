@@ -89,6 +89,7 @@ interface ResumeStore {
   updateTheme: (theme: Partial<ThemeSettings>) => void
 
   // ── Global ────────────────────────────────────────────────────────────────
+  importResume: (resume: Resume) => void
   resetToSample: () => void
   clearResume: () => void
 }
@@ -386,6 +387,9 @@ export const useResumeStore = create<ResumeStore>()(
         })),
 
       // ── Global ───────────────────────────────────────────────────────────
+      importResume: (resume) =>
+        set({ resume: touch(resume), activeSection: 'personalInfo' }),
+
       resetToSample: () => set({ resume: sampleResume, activeSection: 'personalInfo' }),
 
       clearResume: () =>

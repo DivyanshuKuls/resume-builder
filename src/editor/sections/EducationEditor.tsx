@@ -1,12 +1,15 @@
-import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useResumeStore } from '@/store/resumeStore'
+import { useUIStore } from '@/store/uiStore'
 import { EntryCard } from '@/editor/components/EntryCard'
 import { BulletListEditor } from '@/editor/components/BulletListEditor'
 import { SectionHeader } from '@/editor/components/SectionHeader'
+import { EmptyState } from '@/editor/components/EmptyState'
 import { formatDateRange } from '@/utils/formatDate'
 import type { Education } from '@/types/resume'
+
+const SECTION_KEY = 'education'
 
 function EducationEntryForm({ edu }: { edu: Education }) {
   const { updateEducation } = useResumeStore()
@@ -81,7 +84,8 @@ function EducationEntryForm({ edu }: { edu: Education }) {
 
 export function EducationEditor() {
   const { resume, addEducation, removeEducation, reorderEducation } = useResumeStore()
-  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const { expandedEntry, setExpandedEntry, toggleExpandedEntry } = useUIStore()
+  const expandedId = expandedEntry[SECTION_KEY] ?? null
 
   function handleAdd() {
     const newEdu: Education = {
@@ -95,7 +99,7 @@ export function EducationEditor() {
       highlights: [],
     }
     addEducation(newEdu)
-    setExpandedId(newEdu.id)
+    setExpandedEntry(SECTION_KEY, newEdu.id)
   }
 
   function move(index: number, direction: 'up' | 'down') {
@@ -115,9 +119,7 @@ export function EducationEditor() {
       />
 
       {resume.education.length === 0 && (
-        <p className="py-8 text-center text-xs text-slate-400">
-          No education entries yet. Click &quot;Add Education&quot; to get started.
-        </p>
+        <EmptyState message="No education entries yet." action="Add Education" />
       )}
 
       <div className="space-y-2">
@@ -130,10 +132,10 @@ export function EducationEditor() {
             isExpanded={expandedId === edu.id}
             isFirst={i === 0}
             isLast={i === resume.education.length - 1}
-            onToggle={() => setExpandedId(expandedId === edu.id ? null : edu.id)}
+            onToggle={() => toggleExpandedEntry(SECTION_KEY, edu.id)}
             onDelete={() => {
               removeEducation(edu.id)
-              if (expandedId === edu.id) setExpandedId(null)
+              if (expandedId === edu.id) setExpandedEntry(SECTION_KEY, null)
             }}
             onMoveUp={() => move(i, 'up')}
             onMoveDown={() => move(i, 'down')}
