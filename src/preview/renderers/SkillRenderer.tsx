@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import type { RendererProps } from './types'
 
 export function SkillRenderer({ resume }: RendererProps) {
@@ -21,14 +22,12 @@ export function SkillRenderer({ resume }: RendererProps) {
 
   if (headingStyle === 'inline') {
     return (
-      <div className="space-y-1">
+      <div className="rt-skill-group-list">
         {populated.map((group) => (
-          <div key={group.id} className="rt-body flex gap-1.5">
-            <span className="rt-entry-title shrink-0" style={{ minWidth: 72 }}>
-              {group.category}:
-            </span>
-            <span>{group.skills.map((s) => s.name).join(' · ')}</span>
-          </div>
+          <Fragment key={group.id}>
+            <span className="rt-entry-title rt-skill-group-label">{group.category}:</span>
+            <span className="rt-body">{group.skills.map((s) => s.name).join(' · ')}</span>
+          </Fragment>
         ))}
       </div>
     )

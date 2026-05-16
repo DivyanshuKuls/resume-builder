@@ -30,17 +30,14 @@ These foundational items are done and inform current backlog priorities.
 - **Test fixtures + builders**: 4 JSON fixtures + `resumeBuilders.ts` factory functions
 - **Testing strategy documentation**: `docs/testing-strategy.md`
 - **Basic import validation**: `parseResumeJSON` validates structure, guards array fields, merges defaults
+- **Error boundaries**: renderer crashes isolate per-section with fallback UI; editor crashes show a reload prompt without affecting the preview
 
 ---
 
 ## P0 — Critical Stability & Maintainability
 
-### Error Boundaries
-- [ ] Add React error boundary around `SectionRenderer` to isolate renderer crashes
-- [ ] Add error boundary around `EditorPanel` to prevent editor crashes from killing preview
-- [ ] Log boundary errors for debugging (console + optional future error reporting)
-
 ### Runtime Schema Validation
+
 - [ ] Add Zod schema for deep field-level validation of imported resume data (array items, nested objects)
 - [ ] Validate on store hydration (catch stale localStorage shapes that migration didn't cover)
 
@@ -51,6 +48,7 @@ These foundational items are done and inform current backlog priorities.
 ## P1 — Core Product Improvements
 
 ### Import Pipeline
+
 - [ ] Build PDF text-extraction parser (pdfjs-dist) for importing existing resumes
 - [ ] Build plain-text / pasted-text parser with heuristic section detection
 - [ ] Build LinkedIn profile import (HTML copy-paste → structured resume)
@@ -58,18 +56,22 @@ These foundational items are done and inform current backlog priorities.
 - [ ] Display field-level parse confidence and allow user correction before committing
 
 ### Editor UX
+
 - [ ] Show per-section word count / character count in editors
 - [ ] Add "focus mode" that hides nav and expands form area
 - [ ] Auto-save indicator (derived from `updatedAt` timestamp)
 - [ ] Undo/redo support (via Zustand middleware or immer patches)
 - [ ] Keyboard shortcut to jump between sections (e.g., `Ctrl+]` next section)
+- [ ] Text box to apply multiple bullet points
 
 ### Preview Fidelity
+
 - [ ] Add overflow / page-break indicator when content exceeds one A4 page
 - [ ] Show page count badge in preview toolbar
 - [ ] Add optional photo frame shape options (circle, rounded square)
 
 ### Section Management
+
 - [ ] Duplicate existing section (copy all entries)
 - [ ] "Reset to sample" per section
 - [ ] Section-level notes field (stored but not rendered — for user reference)
@@ -79,25 +81,30 @@ These foundational items are done and inform current backlog priorities.
 ## P2 — Architecture Improvements
 
 ### Zustand Store Refactor
+
 - [ ] Split `resumeStore.ts` into domain slices (personal, contact, sections, theme, skills, entries)
 - [ ] Compose slices with `immer` middleware for immutability guarantees
 - [ ] Add store selectors module to co-locate derived state logic with the store
 
 ### Renderer Virtualization
+
 - [ ] Investigate `react-window` or scroll-anchoring for long preview sections
 - [ ] Profile re-render frequency when editing large Experience/Projects lists
 
 ### Theme System Extension
+
 - [ ] Add border-radius scale to `ResumeTheme` (currently hardcoded per-component)
 - [ ] Expose heading alignment option (`center` vs `left` for name/section headings)
 - [ ] Allow custom color palette upload (import from image)
 
 ### Component Extraction
+
 - [ ] Extract `EntryCard` date-range rendering into a shared `DateRange` component
 - [ ] Extract link rendering (contact, project URLs) into a shared `ExternalLink` component
 - [ ] Consolidate duplicate bullet-list rendering between `BulletListEditor` and renderers
 
 ### Type System
+
 - [ ] Replace string literal `SectionType` union with a generated enum or `as const` map
 - [ ] Add `SectionMeta` type for `SECTION_TYPE_META` entries (currently inferred)
 - [ ] Narrow `CustomSection.content` — currently `string`, could be `MarkdownContent` branded type
@@ -107,26 +114,31 @@ These foundational items are done and inform current backlog priorities.
 ## P3 — Future / Advanced Features
 
 ### Template System
+
 - [ ] Define `ResumeTemplate` interface (layout grid, section placement, font pairing)
 - [ ] Build template switcher that preserves data but swaps layout + theme
 - [ ] At least two distinct layout templates: single-column and sidebar-column
 
 ### AI Integration
+
 - [ ] AI-assisted bullet point rewriting (improve phrasing for impact)
 - [ ] AI summary generation from experience entries
 - [ ] Job description matching: highlight resume keywords that match a job posting
 
 ### Collaboration & Cloud
+
 - [ ] Shareable read-only preview link (URL-encoded compressed JSON)
 - [ ] Named resume versions / snapshots
 - [ ] Cloud sync backend (auth + storage — would require API layer)
 
 ### Export Extensions
+
 - [ ] DOCX export via `docx` npm package
 - [ ] HTML export (self-contained file with embedded CSS)
 - [ ] ATS-safe plain text export (strips formatting, preserves structure)
 
 ### Performance & Scalability
+
 - [ ] Lazy-load section editors (dynamic imports via React.lazy)
 - [ ] Lazy-load section renderers for unused section types
 - [ ] Profile and benchmark full re-render cycle on 10+ section resumes

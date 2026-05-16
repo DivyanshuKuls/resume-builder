@@ -1,6 +1,7 @@
 import { cn } from '@/utils/cn'
 import { SectionHeading } from '@/preview/SectionHeading'
 import { SECTION_RENDERERS, hasSectionContent } from '@/preview/renderers'
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
 import type { Resume, SectionConfig } from '@/types/resume'
 
 interface SectionRendererProps {
@@ -35,15 +36,24 @@ export function SectionRenderer({ resume, section }: SectionRendererProps) {
 
   const alignClass = ALIGN_CLASS[section.alignment] ?? ''
 
-  return (
-    <section
-      className={cn('resume-section', alignClass)}
-      data-section-id={section.id}
-      data-section-type={section.type}
-      aria-label={section.title}
-    >
+  const fallback = (
+    <section className="resume-section" data-section-id={section.id}>
       <SectionHeading>{section.title}</SectionHeading>
-      <ContentRenderer resume={resume} section={section} />
+      <p className="rt-body" style={{ opacity: 0.4 }}>Could not render this section.</p>
     </section>
+  )
+
+  return (
+    <ErrorBoundary fallback={fallback}>
+      <section
+        className={cn('resume-section', alignClass)}
+        data-section-id={section.id}
+        data-section-type={section.type}
+        aria-label={section.title}
+      >
+        <SectionHeading>{section.title}</SectionHeading>
+        <ContentRenderer resume={resume} section={section} />
+      </section>
+    </ErrorBoundary>
   )
 }

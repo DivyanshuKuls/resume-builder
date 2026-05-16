@@ -27,8 +27,8 @@ export function ExperienceRenderer({ resume }: RendererProps) {
           {exp.highlights.length > 0 && (
             <ul className="mt-1.5 space-y-1" aria-label="Key achievements">
               {exp.highlights.map((point, i) => (
-                <li key={i} className="rt-body flex gap-2 leading-relaxed">
-                  <span aria-hidden="true" className="rt-bullet mt-[6px] h-[3px] w-[3px] shrink-0 rounded-full" />
+                <li key={i} className="rt-body flex gap-2">
+                  <span aria-hidden="true" className="rt-bullet-dot" />
                   <span>{point}</span>
                 </li>
               ))}

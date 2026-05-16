@@ -161,6 +161,42 @@
   background-color: var(--rt-color-muted, #6b7280);
 }
 
+/*
+ * Complete bullet dot — replaces the old pattern of:
+ *   rt-bullet mt-[6px] h-[3px] w-[3px] shrink-0 rounded-full
+ *
+ * margin-top centers the 3px dot within the first text line using the actual
+ * theme line-height and current font size. Adjusts automatically across all
+ * theme presets and font scales without any hardcoded pixel offsets.
+ */
+.rt-bullet-dot {
+  background-color: var(--rt-color-muted, #6b7280);
+  border-radius: 50%;
+  flex-shrink: 0;
+  width: 3px;
+  height: 3px;
+  margin-top: calc((var(--rt-line-height, 1.55) * 1em - 3px) / 2);
+}
+
+/*
+ * Grid layout for inline grouped skill rows.
+ * All label cells share one auto-sized column (max-content of the longest
+ * label), so colons align vertically regardless of label length.
+ * align-items: baseline keeps the first skill text line on the same
+ * baseline as its label.
+ */
+.rt-skill-group-list {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 0.5em;
+  row-gap: var(--rt-spacing-item-gap, 4px);
+  align-items: baseline;
+}
+
+.rt-skill-group-label {
+  white-space: nowrap;
+}
+
 .rt-icon-muted {
   color: var(--rt-color-muted, #6b7280);
 }

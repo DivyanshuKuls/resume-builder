@@ -10,6 +10,17 @@ Pending work tracked in [backlog.md](backlog.md).
 
 ---
 
+## [0.7.0] — 2026-05-16
+
+_Error isolation_
+
+### Added
+- Per-section error boundary in the preview: a renderer crash now isolates to that section with a fallback UI — the rest of the resume continues rendering
+- Editor error boundary: a crash in the form area shows a "reload to recover" message without affecting the preview panel
+- Boundary errors are logged to console with component stack for debugging
+
+---
+
 ## [0.6.0] — 2026-05-15
 
 _Testing infrastructure and import validation_

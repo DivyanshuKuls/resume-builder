@@ -1,5 +1,15 @@
 import { EditorNav } from '@/editor/EditorNav'
 import { SectionEditor } from '@/editor/SectionEditor'
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
+
+const editorFallback = (
+  <div className="flex h-full items-center justify-center p-8 text-center">
+    <div>
+      <p className="text-sm font-medium text-slate-700">Editor encountered an error.</p>
+      <p className="mt-1 text-xs text-slate-400">Reload the page to recover.</p>
+    </div>
+  </div>
+)
 
 export function EditorPanel() {
   return (
@@ -15,7 +25,9 @@ export function EditorPanel() {
       {/* Form content area */}
       <div className="no-print flex flex-1 flex-col overflow-hidden bg-slate-50">
         <div className="flex-1 overflow-y-auto p-5">
-          <SectionEditor />
+          <ErrorBoundary fallback={editorFallback}>
+            <SectionEditor />
+          </ErrorBoundary>
         </div>
       </div>
     </div>

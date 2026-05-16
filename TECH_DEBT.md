@@ -44,11 +44,6 @@ Known architectural gaps, scalability concerns, and deferred decisions. Each ite
 
 ## Rendering
 
-### No Error Boundaries Around Renderers
-**Severity:** High  
-**Impact:** A runtime error in any renderer (malformed data, unexpected null) crashes the entire preview. There is no fallback.  
-**Recommended solution:** Wrap `SectionRenderer` in a React error boundary with a per-section fallback UI. Log the error details for debugging. Also wrap `EditorPanel` to isolate editor crashes from the preview.
-
 ### PDF Pagination Edge Cases
 **Severity:** Medium  
 **Impact:** CSS `break-inside: avoid` on `.resume-entry` prevents mid-entry page breaks, but long entries (many bullets) can still overflow a page without breaking. Very long skill lists and custom sections have no break guidance.  
